@@ -7,7 +7,7 @@
     "start": "rollup -c -w"
   },
   "dependencies": {
-    "rough-notation": "^0.1.1"
+    "rough-notation": "^0.2.0"
   },
   "peerDependencies": {
     "react": "^16.8.0",

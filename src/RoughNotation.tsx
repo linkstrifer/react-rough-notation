@@ -1,8 +1,7 @@
 import React from "react";
 import { useRef, useEffect } from "react";
 
-// import { annotate } from "rough-notation";
-import { annotate } from "../node_modules/rough-notation/lib/rough-notation";
+import { annotate } from "rough-notation/lib/rough-notation";
 
 type types =
   | "underline"
