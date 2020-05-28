@@ -1,4 +1,7 @@
-src
-demo
 .babelrc
+config
+demo
+public
+scripts
+src
 webpack.config.js
