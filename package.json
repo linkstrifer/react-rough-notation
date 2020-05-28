@@ -1,33 +1,31 @@
 {
   "name": "react-rough-notation",
   "version": "0.0.3",
-  "main": "./lib/RoughNotation.js",
+  "main": "./dist/main.js",
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -c -w"
+  },
   "dependencies": {
     "rough-notation": "^0.1.1"
   },
-  "devDependencies": {
-    "babel-core": "^6.21.0",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.16.0",
-    "babel-preset-stage-0": "^6.24.1",
-    "path": "^0.12.7",
-    "prop-types": "^15.6.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.0.0",
-    "ts-loader": "^7.0.5",
-    "typescript": "^3.9.3",
-    "webpack": "^4.5.0",
-    "webpack-cli": "^3.2.1"
-  },
   "peerDependencies": {
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
   },
-  "scripts": {
-    "build": "webpack"
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^8.0.0",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
+    "babel-core": "^6.26.3",
+    "babel-runtime": "^6.26.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "rollup": "^2.11.2",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "typescript": "^3.9.3"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  }
+  "files": [
+    "dist"
+  ]
 }
