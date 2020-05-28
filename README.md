@@ -18,6 +18,7 @@ This is a React wrapper for [RoughNotation](https://roughnotation.com/), a small
   - [API](#api)
     - [Props](#props)
     - [Type values](#type-values)
+  - [TODO](#todo)
 
 <!-- /TOC -->
 
@@ -70,3 +71,8 @@ import { RoughNotation } from "react-rough-notation";
 | highlight      | Creates a highlight effect as if maked by a highlighter |
 | strike-through | This style draws a box around the element               |
 | crossed-off    | This style draws a box around the element               |
+
+## TODO
+
+- [ ] Add annotation group support
+- [ ] Add react playground/example/demo
