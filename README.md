@@ -1,6 +1,6 @@
-![Rough Notation logo](https://roughnotation.com/images/social.png)
-
 # Rough Notation React (Wrapper)
+
+![Rough Notation logo](https://roughnotation.com/images/social.png)
 
 This is a React wrapper for [RoughNotation](https://roughnotation.com/), a small JavaScript library to create and animate annotations on a web page.
 

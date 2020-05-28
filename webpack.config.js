@@ -23,6 +23,5 @@ module.exports = {
   output: {
     path: path.resolve("lib"),
     filename: "RoughNotation.js",
-    libraryTarget: "commonjs2",
   },
 };
