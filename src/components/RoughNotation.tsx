@@ -12,27 +12,30 @@ type types =
   | "strike-through"
   | "crossed-off";
 
-export default function RoughNotation({
+function RoughNotation({
   animate = true,
   animationDelay = 0,
   animationDuration = 800,
   children,
   color,
+  customElement = "span",
   getAnnotationObject,
   padding = 5,
   show = false,
   strokeWidth = 1,
   type,
+  ...rest
 }: {
-  animate: boolean;
-  animationDelay: number;
-  animationDuration: number;
+  animate?: boolean;
+  animationDelay?: number;
+  animationDuration?: number;
   children: any;
   color?: string;
-  getAnnotationObject: Function;
-  padding: number;
-  show: boolean;
-  strokeWidth: number;
+  customElement?: string;
+  getAnnotationObject?: Function;
+  padding?: number;
+  show?: boolean;
+  strokeWidth?: number;
   type: types;
 }) {
   const element = useRef<HTMLElement>(document.createElement("span"));
@@ -71,5 +74,14 @@ export default function RoughNotation({
     }
   }, [show, annotation]);
 
-  return <span ref={element}>{children}</span>;
+  return React.createElement(
+    customElement,
+    {
+      ref: element,
+      ...rest,
+    },
+    children
+  );
 }
+
+export default RoughNotation;
