@@ -27,5 +27,22 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "description": "This is a React wrapper for [RoughNotation](https://roughnotation.com/), a small JavaScript library to create and animate annotations on a web page.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linkstrifer/react-rough-notation.git"
+  },
+  "keywords": [
+    "react",
+    "annotate",
+    "rough",
+    "sketchy"
+  ],
+  "author": "Link Strifer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/linkstrifer/react-rough-notation/issues"
+  },
+  "homepage": "https://github.com/linkstrifer/react-rough-notation#readme"
 }

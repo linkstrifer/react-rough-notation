@@ -15,9 +15,9 @@ This is a React wrapper for [RoughNotation](https://roughnotation.com/), a small
   - [Table of contents](#table-of-contents)
   - [Installation](#installation)
   - [Usage](#usage)
-  - [API](#api)
-    - [Props](#props)
-    - [Type values](#type-values)
+  - [Props](#props)
+  - [Type values](#type-values)
+  - [Playground](#playground)
   - [TODO](#todo)
 
 <!-- /TOC -->
@@ -44,9 +44,7 @@ import { RoughNotation } from "react-rough-notation";
 </RoughNotation>
 ```
 
-## API
-
-### Props
+## Props
 
 | name                | type     | default                                                        | description                                                                                                                                                               |
 | ------------------- | -------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -61,7 +59,7 @@ import { RoughNotation } from "react-rough-notation";
 | strokeWidth         | number   | 1                                                              | Width of the annotation strokes                                                                                                                                           |
 | type                | enum     | underline, box, circle, highlight, strike-through, crossed-off | This is a mandatory field. It sets the annotation style                                                                                                                   |
 
-### Type values
+## Type values
 
 | value          | description                                             |
 | -------------- | ------------------------------------------------------- |
@@ -72,7 +70,10 @@ import { RoughNotation } from "react-rough-notation";
 | strike-through | This style draws a box around the element               |
 | crossed-off    | This style draws a box around the element               |
 
+## Playground
+
+You can find a [CodeSandbox demo here](https://codesandbox.io/s/react-rough-notation-playground-gvkq2?file=/src/App.js)
+
 ## TODO
 
 - [ ] Add annotation group support
-- [ ] Add react playground/example/demo
