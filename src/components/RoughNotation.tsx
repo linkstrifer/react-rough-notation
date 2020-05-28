@@ -35,20 +35,23 @@ export default function RoughNotation({
   strokeWidth: number;
   type: types;
 }) {
-  const element = useRef(null);
-  const annotation = useRef(null);
+  const element = useRef<HTMLElement>(document.createElement("span"));
+  const annotation = useRef({
+    remove: () => {},
+    show: () => {},
+    hide: () => {},
+  });
+  const configuration = {
+    animate,
+    animationDelay,
+    animationDuration,
+    color,
+    padding,
+    strokeWidth,
+    type,
+  };
 
   useEffect(() => {
-    const configuration = {
-      animate,
-      animationDelay,
-      animationDuration,
-      color,
-      padding,
-      strokeWidth,
-      type,
-    };
-
     annotation.current = annotate(element.current, configuration);
 
     if (getAnnotationObject) {
@@ -58,7 +61,7 @@ export default function RoughNotation({
     return () => {
       annotation.current.remove();
     };
-  }, []);
+  }, [configuration, getAnnotationObject]);
 
   useEffect(() => {
     if (show) {
