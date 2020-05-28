@@ -1,6 +1,6 @@
 {
   "name": "react-rough-notation",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "./lib/RoughNotation.js",
   "dependencies": {
     "rough-notation": "^0.1.1"
