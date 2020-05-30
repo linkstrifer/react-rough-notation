@@ -77,3 +77,4 @@ You can find a [CodeSandbox demo here](https://codesandbox.io/s/react-rough-nota
 ## TODO
 
 - [ ] Add annotation group support
+- [ ] Auto compile and publish to npm

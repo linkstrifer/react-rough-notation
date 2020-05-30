@@ -1,6 +1,6 @@
 import React from "react";
-declare type types = "underline" | "box" | "circle" | "highlight" | "strike-through" | "crossed-off";
-declare function RoughNotation({ animate, animationDelay, animationDuration, children, color, customElement, getAnnotationObject, padding, show, strokeWidth, type, ...rest }: {
+export declare type types = "underline" | "box" | "circle" | "highlight" | "strike-through" | "crossed-off";
+export interface RoughNotationProps {
     animate?: boolean;
     animationDelay?: number;
     animationDuration?: number;
@@ -12,5 +12,6 @@ declare function RoughNotation({ animate, animationDelay, animationDuration, chi
     show?: boolean;
     strokeWidth?: number;
     type: types;
-}): React.DOMElement<React.DOMAttributes<HTMLElement>, HTMLElement>;
+}
+declare function RoughNotation({ animate, animationDelay, animationDuration, children, color, customElement, getAnnotationObject, padding, show, strokeWidth, type, ...rest }: RoughNotationProps): React.DOMElement<React.DOMAttributes<HTMLElement>, HTMLElement>;
 export default RoughNotation;

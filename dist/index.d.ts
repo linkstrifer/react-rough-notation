@@ -1,1 +1,1 @@
-export { default as RoughNotation } from "./RoughNotation";
+export { default as RoughNotation, RoughNotationProps, types } from "./RoughNotation";
