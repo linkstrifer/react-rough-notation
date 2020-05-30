@@ -601,24 +601,32 @@ function RoughNotation(_a) {
         show: function () { },
         hide: function () { },
     });
-    var configuration = {
-        animate: animate,
-        animationDelay: animationDelay,
-        animationDuration: animationDuration,
-        color: color,
-        padding: padding,
-        strokeWidth: strokeWidth,
-        type: type,
-    };
     React.useEffect(function () {
-        annotation.current = annotate(element.current, configuration);
+        annotation.current = annotate(element.current, {
+            animate: animate,
+            animationDelay: animationDelay,
+            animationDuration: animationDuration,
+            color: color,
+            padding: padding,
+            strokeWidth: strokeWidth,
+            type: type,
+        });
         if (getAnnotationObject) {
             getAnnotationObject(annotation.current);
         }
         return function () {
             annotation.current.remove();
         };
-    }, [configuration, getAnnotationObject]);
+    }, [
+        animate,
+        animationDelay,
+        animationDuration,
+        color,
+        padding,
+        strokeWidth,
+        type,
+        getAnnotationObject,
+    ]);
     React.useEffect(function () {
         if (show) {
             annotation.current.show();

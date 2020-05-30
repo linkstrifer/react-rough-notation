@@ -45,18 +45,17 @@ function RoughNotation({
     show: () => {},
     hide: () => {},
   });
-  const configuration = {
-    animate,
-    animationDelay,
-    animationDuration,
-    color,
-    padding,
-    strokeWidth,
-    type,
-  };
 
   useEffect(() => {
-    annotation.current = annotate(element.current, configuration);
+    annotation.current = annotate(element.current, {
+      animate,
+      animationDelay,
+      animationDuration,
+      color,
+      padding,
+      strokeWidth,
+      type,
+    });
 
     if (getAnnotationObject) {
       getAnnotationObject(annotation.current);
@@ -65,7 +64,16 @@ function RoughNotation({
     return () => {
       annotation.current.remove();
     };
-  }, [configuration, getAnnotationObject]);
+  }, [
+    animate,
+    animationDelay,
+    animationDuration,
+    color,
+    padding,
+    strokeWidth,
+    type,
+    getAnnotationObject,
+  ]);
 
   useEffect(() => {
     if (show) {
