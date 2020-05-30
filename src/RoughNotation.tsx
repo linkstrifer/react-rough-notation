@@ -3,13 +3,27 @@ import { useRef, useEffect } from "react";
 
 import { annotate } from "rough-notation/lib/rough-notation";
 
-type types =
+export type types =
   | "underline"
   | "box"
   | "circle"
   | "highlight"
   | "strike-through"
   | "crossed-off";
+
+export interface RoughNotationProps {
+  animate?: boolean;
+  animationDelay?: number;
+  animationDuration?: number;
+  children: any;
+  color?: string;
+  customElement?: string;
+  getAnnotationObject?: Function;
+  padding?: number;
+  show?: boolean;
+  strokeWidth?: number;
+  type: types;
+}
 
 function RoughNotation({
   animate = true,
@@ -24,19 +38,7 @@ function RoughNotation({
   strokeWidth = 1,
   type,
   ...rest
-}: {
-  animate?: boolean;
-  animationDelay?: number;
-  animationDuration?: number;
-  children: any;
-  color?: string;
-  customElement?: string;
-  getAnnotationObject?: Function;
-  padding?: number;
-  show?: boolean;
-  strokeWidth?: number;
-  type: types;
-}) {
+}: RoughNotationProps) {
   const element = useRef<HTMLElement>(document.createElement("span"));
   const annotation = useRef({
     remove: () => {},
