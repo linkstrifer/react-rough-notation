@@ -43,6 +43,14 @@ function __rest(s, e) {
     return t;
 }
 
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+}
+
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const DEFAULT_ANIMATION_DURATION = 800;
 
@@ -592,6 +600,77 @@ class RoughAnnotationImpl {
 function annotate(element, config) {
     return new RoughAnnotationImpl(element, config);
 }
+function annotationGroup(annotations) {
+    let delay = 0;
+    for (const a of annotations) {
+        const ai = a;
+        ai._animationGroupDelay = delay;
+        const duration = ai.config.animationDuration === 0 ? 0 : (ai.config.animationDuration || DEFAULT_ANIMATION_DURATION);
+        delay += duration;
+    }
+    const list = [...annotations];
+    return {
+        show() {
+            for (const a of list) {
+                a.show();
+            }
+        },
+        hide() {
+            for (const a of list) {
+                a.hide();
+            }
+        }
+    };
+}
+
+var GroupContext = React.createContext(null);
+var GroupDispatchContext = React.createContext(null);
+var initialState = {
+    annotations: [],
+};
+function reducer(state, _a) {
+    var type = _a.type, payload = _a.payload;
+    switch (type) {
+        case "ADD":
+            return __assign(__assign({}, state), { annotations: __spreadArrays(state.annotations, [payload]) });
+        default:
+            return state;
+    }
+}
+function RoughNotationGroup(_a) {
+    var children = _a.children, show = _a.show;
+    var _b = React.useReducer(reducer, initialState), state = _b[0], dispatch = _b[1];
+    React.useEffect(function () {
+        var group = annotationGroup(state.annotations.map(function (_a) {
+            var current = _a.current;
+            return current;
+        }));
+        if (show) {
+            group.show();
+        }
+        else {
+            group.hide();
+        }
+    }, [show, state]);
+    return (React__default.createElement(GroupContext.Provider, { value: state },
+        React__default.createElement(GroupDispatchContext.Provider, { value: dispatch }, children)));
+}
+function useGroupContext(annotation) {
+    var context = React.useContext(GroupContext);
+    var dispatch = React.useContext(GroupDispatchContext);
+    if (!context) {
+        return undefined;
+    }
+    React.useEffect(function () {
+        if (dispatch) {
+            dispatch({
+                type: "ADD",
+                payload: annotation,
+            });
+        }
+    }, []);
+    return;
+}
 
 function RoughNotation(_a) {
     var _b = _a.animate, animate = _b === void 0 ? true : _b, _c = _a.animationDelay, animationDelay = _c === void 0 ? 0 : _c, _d = _a.animationDuration, animationDuration = _d === void 0 ? 800 : _d, children = _a.children, color = _a.color, _e = _a.customElement, customElement = _e === void 0 ? "span" : _e, getAnnotationObject = _a.getAnnotationObject, _f = _a.padding, padding = _f === void 0 ? 5 : _f, _g = _a.show, show = _g === void 0 ? false : _g, _h = _a.strokeWidth, strokeWidth = _h === void 0 ? 1 : _h, type = _a.type, rest = __rest(_a, ["animate", "animationDelay", "animationDuration", "children", "color", "customElement", "getAnnotationObject", "padding", "show", "strokeWidth", "type"]);
@@ -601,6 +680,7 @@ function RoughNotation(_a) {
         show: function () { },
         hide: function () { },
     });
+    useGroupContext(annotation);
     React.useEffect(function () {
         annotation.current = annotate(element.current, {
             animate: animate,
@@ -639,4 +719,5 @@ function RoughNotation(_a) {
 }
 
 exports.RoughNotation = RoughNotation;
+exports.RoughNotationGroup = RoughNotationGroup;
 //# sourceMappingURL=main.js.map

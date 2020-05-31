@@ -3,27 +3,9 @@ import { useRef, useEffect } from "react";
 
 import { annotate } from "rough-notation/lib/rough-notation";
 
-export type types =
-  | "underline"
-  | "box"
-  | "circle"
-  | "highlight"
-  | "strike-through"
-  | "crossed-off";
+import { useGroupContext } from "../RoughNotationGroup/RoughNotationGroup";
 
-export interface RoughNotationProps {
-  animate?: boolean;
-  animationDelay?: number;
-  animationDuration?: number;
-  children: any;
-  color?: string;
-  customElement?: string;
-  getAnnotationObject?: Function;
-  padding?: number;
-  show?: boolean;
-  strokeWidth?: number;
-  type: types;
-}
+import { RoughNotationProps } from "./types";
 
 function RoughNotation({
   animate = true,
@@ -45,6 +27,8 @@ function RoughNotation({
     show: () => {},
     hide: () => {},
   });
+
+  useGroupContext(annotation);
 
   useEffect(() => {
     annotation.current = annotate(element.current, {
