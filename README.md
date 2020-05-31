@@ -106,5 +106,6 @@ You can find a [CodeSandbox demo here](https://codesandbox.io/s/react-rough-nota
 
 ## TODO
 
+- [ ] Add group annotation custom order support
 - [ ] Auto compile and publish to npm
-- [ ] testing
+- [ ] Testing
