@@ -14,9 +14,13 @@ This is a React wrapper for [RoughNotation](https://roughnotation.com/), a small
 - [Rough Notation React (Wrapper)](#rough-notation-react-wrapper)
   - [Table of contents](#table-of-contents)
   - [Installation](#installation)
-  - [Usage](#usage)
-  - [Props](#props)
-  - [Type values](#type-values)
+  - [RoughNotation Component](#roughnotation-component)
+    - [Usage](#usage)
+    - [Props](#props)
+    - [Type values](#type-values)
+  - [RoughNotationGroup Component](#roughnotationgroup-component)
+    - [Usage](#usage)
+    - [Props](#props)
   - [Playground](#playground)
   - [TODO](#todo)
 
@@ -24,27 +28,33 @@ This is a React wrapper for [RoughNotation](https://roughnotation.com/), a small
 
 ## Installation
 
-You can add rough-notation to your project via npm
+You can add rough-notation to your project via npm.
 
 ```
 npm install --save react-rough-notation
 ```
 
-Then just import the component
+Then just import the components you need.
 
 ```js
-import { RoughNotation } from "react-rough-notation";
+import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
 ```
 
-## Usage
+## RoughNotation Component
+
+This is the main component, is a span element by default but you can change the tag name by anything you want using the `customElement` prop.
+
+### Usage
 
 ```jsx
-<RoughNotation type="underline">
-  <h1>Hello RoughNotation</h1>
+<RoughNotation type="underline" show={state.show}>
+  Hello RoughNotation
 </RoughNotation>
 ```
 
-## Props
+### Props
+
+Any unlisted prop will be pass to the component so you can use any react prop to handle interactions or styling.
 
 | name                | type     | default                                                        | description                                                                                                                                                               |
 | ------------------- | -------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -59,7 +69,7 @@ import { RoughNotation } from "react-rough-notation";
 | strokeWidth         | number   | 1                                                              | Width of the annotation strokes                                                                                                                                           |
 | type                | enum     | underline, box, circle, highlight, strike-through, crossed-off | This is a mandatory field. It sets the annotation style                                                                                                                   |
 
-## Type values
+### Type values
 
 | value          | description                                             |
 | -------------- | ------------------------------------------------------- |
@@ -70,11 +80,31 @@ import { RoughNotation } from "react-rough-notation";
 | strike-through | This style draws a box around the element               |
 | crossed-off    | This style draws a box around the element               |
 
+## RoughNotationGroup Component
+
+This is a wrapper for multiple annotations, it will trigger the `show()` method on every child annotation after the prev annotation animation is complete. **It does not render any HTML element.**
+
+### Usage
+
+```jsx
+<RoughNotationGroup show={state.show}>
+  <RoughNotation type="underline">Hello,</RoughNotation>
+  <RoughNotation type="underline">This is</RoughNotation>
+  <RoughNotation type="underline">a Test</RoughNotation>
+</RoughNotationGroup>
+```
+
+### Props
+
+| name | type    | default | description                |
+| ---- | ------- | ------- | -------------------------- |
+| show | boolean |         | show/hides the annotations |
+
 ## Playground
 
 You can find a [CodeSandbox demo here](https://codesandbox.io/s/react-rough-notation-playground-gvkq2?file=/src/App.js)
 
 ## TODO
 
-- [ ] Add annotation group support
 - [ ] Auto compile and publish to npm
+- [ ] testing
