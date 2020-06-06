@@ -51,561 +51,16 @@ function __spreadArrays() {
     return r;
 }
 
-const SVG_NS = 'http://www.w3.org/2000/svg';
+const t="http://www.w3.org/2000/svg";class e{constructor(t){this.seed=t;}next(){return this.seed?(2**31-1&(this.seed=Math.imul(48271,this.seed)))/2**31:Math.random()}}function s(t,e,s,i,n){return {type:"path",ops:c(t,e,s,i,n)}}function i(t,e){return function(t,e,i){const n=(t||[]).length;if(n>2){const s=[];for(let e=0;e<n-1;e++)s.push(...c(t[e][0],t[e][1],t[e+1][0],t[e+1][1],i));return e&&s.push(...c(t[n-1][0],t[n-1][1],t[0][0],t[0][1],i)),{type:"path",ops:s}}return 2===n?s(t[0][0],t[0][1],t[1][0],t[1][1],i):{type:"path",ops:[]}}(t,!0,e)}function n(t,e,s,n,o){return i([[t,e],[t+s,e],[t+s,e+n],[t,e+n]],o)}function o(t,e,s,i,n){return function(t,e,s,i){const[n,o]=f(i.increment,t,e,i.rx,i.ry,1,i.increment*h(.1,h(.4,1,s),s),s);let r=l(n,null,s);if(!s.disableMultiStroke){const[n]=f(i.increment,t,e,i.rx,i.ry,1.5,0,s),o=l(n,null,s);r=r.concat(o);}return {estimatedPoints:o,opset:{type:"path",ops:r}}}(t,e,n,function(t,e,s){const i=Math.sqrt(2*Math.PI*Math.sqrt((Math.pow(t/2,2)+Math.pow(e/2,2))/2)),n=Math.max(s.curveStepCount,s.curveStepCount/Math.sqrt(200)*i),o=2*Math.PI/n;let r=Math.abs(t/2),h=Math.abs(e/2);const c=1-s.curveFitting;return r+=a(r*c,s),h+=a(h*c,s),{increment:o,rx:r,ry:h}}(s,i,n)).opset}function r(t){return t.randomizer||(t.randomizer=new e(t.seed||0)),t.randomizer.next()}function h(t,e,s,i=1){return s.roughness*i*(r(s)*(e-t)+t)}function a(t,e,s=1){return h(-t,t,e,s)}function c(t,e,s,i,n,o=!1){const r=o?n.disableMultiStrokeFill:n.disableMultiStroke,h=u(t,e,s,i,n,!0,!1);if(r)return h;const a=u(t,e,s,i,n,!0,!0);return h.concat(a)}function u(t,e,s,i,n,o,h){const c=Math.pow(t-s,2)+Math.pow(e-i,2),u=Math.sqrt(c);let l=1;l=u<200?1:u>500?.4:-.0016668*u+1.233334;let f=n.maxRandomnessOffset||0;f*f*100>c&&(f=u/10);const g=f/2,d=.2+.2*r(n);let p=n.bowing*n.maxRandomnessOffset*(i-e)/200,_=n.bowing*n.maxRandomnessOffset*(t-s)/200;p=a(p,n,l),_=a(_,n,l);const m=[],w=()=>a(g,n,l),v=()=>a(f,n,l);return o&&(h?m.push({op:"move",data:[t+w(),e+w()]}):m.push({op:"move",data:[t+a(f,n,l),e+a(f,n,l)]})),h?m.push({op:"bcurveTo",data:[p+t+(s-t)*d+w(),_+e+(i-e)*d+w(),p+t+2*(s-t)*d+w(),_+e+2*(i-e)*d+w(),s+w(),i+w()]}):m.push({op:"bcurveTo",data:[p+t+(s-t)*d+v(),_+e+(i-e)*d+v(),p+t+2*(s-t)*d+v(),_+e+2*(i-e)*d+v(),s+v(),i+v()]}),m}function l(t,e,s){const i=t.length,n=[];if(i>3){const o=[],r=1-s.curveTightness;n.push({op:"move",data:[t[1][0],t[1][1]]});for(let e=1;e+2<i;e++){const s=t[e];o[0]=[s[0],s[1]],o[1]=[s[0]+(r*t[e+1][0]-r*t[e-1][0])/6,s[1]+(r*t[e+1][1]-r*t[e-1][1])/6],o[2]=[t[e+1][0]+(r*t[e][0]-r*t[e+2][0])/6,t[e+1][1]+(r*t[e][1]-r*t[e+2][1])/6],o[3]=[t[e+1][0],t[e+1][1]],n.push({op:"bcurveTo",data:[o[1][0],o[1][1],o[2][0],o[2][1],o[3][0],o[3][1]]});}if(e&&2===e.length){const t=s.maxRandomnessOffset;n.push({op:"lineTo",data:[e[0]+a(t,s),e[1]+a(t,s)]});}}else 3===i?(n.push({op:"move",data:[t[1][0],t[1][1]]}),n.push({op:"bcurveTo",data:[t[1][0],t[1][1],t[2][0],t[2][1],t[2][0],t[2][1]]})):2===i&&n.push(...c(t[0][0],t[0][1],t[1][0],t[1][1],s));return n}function f(t,e,s,i,n,o,r,h){const c=[],u=[],l=a(.5,h)-Math.PI/2;u.push([a(o,h)+e+.9*i*Math.cos(l-t),a(o,h)+s+.9*n*Math.sin(l-t)]);for(let r=l;r<2*Math.PI+l-.01;r+=t){const t=[a(o,h)+e+i*Math.cos(r),a(o,h)+s+n*Math.sin(r)];c.push(t),u.push(t);}return u.push([a(o,h)+e+i*Math.cos(l+2*Math.PI+.5*r),a(o,h)+s+n*Math.sin(l+2*Math.PI+.5*r)]),u.push([a(o,h)+e+.98*i*Math.cos(l+r),a(o,h)+s+.98*n*Math.sin(l+r)]),u.push([a(o,h)+e+.9*i*Math.cos(l+.5*r),a(o,h)+s+.9*n*Math.sin(l+.5*r)]),[u,c]}const g={maxRandomnessOffset:2,roughness:1.5,bowing:1,stroke:"#000",strokeWidth:1.5,curveTightness:0,curveFitting:.95,curveStepCount:9,fillStyle:"hachure",fillWeight:-1,hachureAngle:-41,hachureGap:-1,dashOffset:-1,dashGap:-1,zigzagOffset:-1,seed:0,combineNestedSvgPaths:!1,disableMultiStroke:!1,disableMultiStrokeFill:!1};function d(t,e){const s=JSON.parse(JSON.stringify(g));switch(t){case"highlight":s.roughness=3,s.disableMultiStroke=!0;break;case"single":s.disableMultiStroke=!0;}return s.seed=e,s}function p(e,i,r,h,a){const c=[];let u=r.strokeWidth||2;const l=function(t){const e=t.padding;if(e||0===e){if("number"==typeof e)return [e,e,e,e];if(Array.isArray(e)){const t=e;if(t.length)switch(t.length){case 4:return [...t];case 1:return [t[0],t[0],t[0],t[0]];case 2:return [...t,...t];case 3:return [...t,t[1]];default:return [t[0],t[1],t[2],t[3]]}}}return [5,5,5,5]}(r),f=void 0===r.animate||!!r.animate,g=r.iterations||2;switch(r.type){case"underline":{const t=d("single",a),e=i.y+i.h+l[2];for(let n=0;n<g;n++)n%2?c.push(s(i.x+i.w,e,i.x,e,t)):c.push(s(i.x,e,i.x+i.w,e,t));break}case"strike-through":{const t=d("single",a),e=i.y+i.h/2;for(let n=0;n<g;n++)n%2?c.push(s(i.x+i.w,e,i.x,e,t)):c.push(s(i.x,e,i.x+i.w,e,t));break}case"box":{const t=d("single",a),e=i.x-l[3],s=i.y-l[0],o=i.w+(l[1]+l[3]),r=i.h+(l[0]+l[2]);for(let i=0;i<g;i++)c.push(n(e,s,o,r,t));break}case"crossed-off":{const t=d("single",a),e=i.x,n=i.y,o=e+i.w,r=n+i.h;for(let i=0;i<g;i++)i%2?c.push(s(o,r,e,n,t)):c.push(s(e,n,o,r,t));for(let i=0;i<g;i++)i%2?c.push(s(e,r,o,n,t)):c.push(s(o,n,e,r,t));break}case"circle":{const t=d("single",a),e=d("double",a),s=i.w+(l[1]+l[3]),n=i.h+(l[0]+l[2]),r=i.x-l[3]+s/2,h=i.y-l[0]+n/2,u=Math.floor(g/2),f=g-2*u;for(let t=0;t<u;t++)c.push(o(r,h,s,n,e));for(let e=0;e<f;e++)c.push(o(r,h,s,n,t));break}case"highlight":{const t=d("highlight",a);u=.95*i.h;const e=i.y+i.h/2;for(let n=0;n<g;n++)n%2?c.push(s(i.x+i.w,e,i.x,e,t)):c.push(s(i.x,e,i.x+i.w,e,t));break}}if(c.length){const s=function(t){const e=[];for(const s of t){let t="";for(const i of s.ops){const s=i.data;switch(i.op){case"move":t.trim()&&e.push(t.trim()),t=`M${s[0]} ${s[1]} `;break;case"bcurveTo":t+=`C${s[0]} ${s[1]}, ${s[2]} ${s[3]}, ${s[4]} ${s[5]} `;break;case"lineTo":t+=`L${s[0]} ${s[1]} `;}}t.trim()&&e.push(t.trim());}return e}(c),i=[],n=[];let o=0;const a=0===r.animationDuration?0:r.animationDuration||800,l=(0===r.animationDelay?0:r.animationDelay||0)+(h||0);for(const h of s){const s=document.createElementNS(t,"path");if(s.setAttribute("d",h),s.setAttribute("fill","none"),s.setAttribute("stroke",r.color||"currentColor"),s.setAttribute("stroke-width",""+u),f){const t=s.getTotalLength();i.push(t),o+=t;}e.appendChild(s),n.push(s);}if(f){let t=0;for(let e=0;e<n.length;e++){const s=n[e],r=i[e],h=o?a*(r/o):0,c=l+t,u=s.style;u.strokeDashoffset=""+r,u.strokeDasharray=""+r,u.animation=`rough-notation-dash ${h}ms ease-out ${c}ms forwards`,t+=h;}}}}class _{constructor(t,e){this._state="unattached",this._resizing=!1,this._seed=Math.floor(Math.random()*2**31),this._animationGroupDelay=0,this._resizeListener=()=>{this._resizing||(this._resizing=!0,setTimeout(()=>{if(this._resizing=!1,"showing"===this._state){const t=this.size();t&&this.hasRectChanged(t)&&this.show();}},400));},this._e=t,this._config=e,this.attach();}get animate(){return this._config.animate}set animate(t){this._config.animate=t;}get animationDuration(){return this._config.animationDuration}set animationDuration(t){this._config.animationDuration=t;}get animationDelay(){return this._config.animationDelay}set animationDelay(t){this._config.animationDelay=t;}get iterations(){return this._config.iterations}set iterations(t){this._config.iterations=t;}get color(){return this._config.color}set color(t){this._config.color!==t&&(this._config.color=t,this.refresh());}get strokeWidth(){return this._config.strokeWidth}set strokeWidth(t){this._config.strokeWidth!==t&&(this._config.strokeWidth=t,this.refresh());}get padding(){return this._config.padding}set padding(t){this._config.padding!==t&&(this._config.padding=t,this.refresh());}attach(){if("unattached"===this._state&&this._e.parentElement){!function(){if(!window.__rno_kf_s){const t=window.__rno_kf_s=document.createElement("style");t.textContent="@keyframes rough-notation-dash { to { stroke-dashoffset: 0; } }",document.head.appendChild(t);}}();const e=this._svg=document.createElementNS(t,"svg");e.setAttribute("class","rough-annotation");const s=e.style;s.position="absolute",s.top="0",s.left="0",s.overflow="visible",s.pointerEvents="none",s.width="100px",s.height="100px";const i="highlight"===this._config.type;if(this._e.insertAdjacentElement(i?"beforebegin":"afterend",e),this._state="not-showing",i){const t=window.getComputedStyle(this._e).position;(!t||"static"===t)&&(this._e.style.position="relative");}this.attachListeners();}}detachListeners(){window.removeEventListener("resize",this._resizeListener),this._ro&&this._ro.unobserve(this._e);}attachListeners(){this.detachListeners(),window.addEventListener("resize",this._resizeListener,{passive:!0}),!this._ro&&"ResizeObserver"in window&&(this._ro=new window.ResizeObserver(t=>{for(const e of t){let t=!0;if(e.contentRect){const s=this.sizeFor(e.contentRect);s&&!this.hasRectChanged(s)&&(t=!1);}t&&this._resizeListener();}})),this._ro&&this._ro.observe(this._e);}sameInteger(t,e){return Math.round(t)===Math.round(e)}hasRectChanged(t){return !this._lastSize||!t||!(this.sameInteger(t.x,this._lastSize.x)&&this.sameInteger(t.y,this._lastSize.y)&&this.sameInteger(t.w,this._lastSize.w)&&this.sameInteger(t.h,this._lastSize.h))}isShowing(){return "not-showing"!==this._state}refresh(){this.isShowing()&&!this.pendingRefresh&&(this.pendingRefresh=Promise.resolve().then(()=>{this.isShowing()&&this.show(),delete this.pendingRefresh;}));}show(){switch(this._state){case"unattached":break;case"showing":this.hide(),this._svg&&this.render(this._svg,!0);break;case"not-showing":this.attach(),this._svg&&this.render(this._svg,!1);}}hide(){if(this._svg)for(;this._svg.lastChild;)this._svg.removeChild(this._svg.lastChild);this._state="not-showing";}remove(){this._svg&&this._svg.parentElement&&this._svg.parentElement.removeChild(this._svg),this._svg=void 0,this._state="unattached",this.detachListeners();}render(t,e){const s=this.size();if(s){let i=this._config;e&&(i=JSON.parse(JSON.stringify(this._config)),i.animate=!1),p(t,s,i,this._animationGroupDelay,this._seed),this._lastSize=s,this._state="showing";}}size(){return this.sizeFor(this._e.getBoundingClientRect())}sizeFor(t){if(this._svg){const e=this._svg.getBoundingClientRect(),s=t;return {x:(s.x||s.left)-(e.x||e.left),y:(s.y||s.top)-(e.y||e.top),w:s.width,h:s.height}}return null}}function m(t,e){return new _(t,e)}
+
 const DEFAULT_ANIMATION_DURATION = 800;
 
-class Random {
-    constructor(seed) {
-        this.seed = seed;
-    }
-    next() {
-        if (this.seed) {
-            return ((2 ** 31 - 1) & (this.seed = Math.imul(48271, this.seed))) / 2 ** 31;
-        }
-        else {
-            return Math.random();
-        }
-    }
-}
-
-function line(x1, y1, x2, y2, o) {
-    return { type: 'path', ops: _doubleLine(x1, y1, x2, y2, o) };
-}
-function linearPath(points, close, o) {
-    const len = (points || []).length;
-    if (len > 2) {
-        const ops = [];
-        for (let i = 0; i < (len - 1); i++) {
-            ops.push(..._doubleLine(points[i][0], points[i][1], points[i + 1][0], points[i + 1][1], o));
-        }
-        if (close) {
-            ops.push(..._doubleLine(points[len - 1][0], points[len - 1][1], points[0][0], points[0][1], o));
-        }
-        return { type: 'path', ops };
-    }
-    else if (len === 2) {
-        return line(points[0][0], points[0][1], points[1][0], points[1][1], o);
-    }
-    return { type: 'path', ops: [] };
-}
-function polygon(points, o) {
-    return linearPath(points, true, o);
-}
-function rectangle(x, y, width, height, o) {
-    const points = [
-        [x, y],
-        [x + width, y],
-        [x + width, y + height],
-        [x, y + height]
-    ];
-    return polygon(points, o);
-}
-function ellipse(x, y, width, height, o) {
-    const params = generateEllipseParams(width, height, o);
-    return ellipseWithParams(x, y, o, params).opset;
-}
-function generateEllipseParams(width, height, o) {
-    const psq = Math.sqrt(Math.PI * 2 * Math.sqrt((Math.pow(width / 2, 2) + Math.pow(height / 2, 2)) / 2));
-    const stepCount = Math.max(o.curveStepCount, (o.curveStepCount / Math.sqrt(200)) * psq);
-    const increment = (Math.PI * 2) / stepCount;
-    let rx = Math.abs(width / 2);
-    let ry = Math.abs(height / 2);
-    const curveFitRandomness = 1 - o.curveFitting;
-    rx += _offsetOpt(rx * curveFitRandomness, o);
-    ry += _offsetOpt(ry * curveFitRandomness, o);
-    return { increment, rx, ry };
-}
-function ellipseWithParams(x, y, o, ellipseParams) {
-    const [ap1, cp1] = _computeEllipsePoints(ellipseParams.increment, x, y, ellipseParams.rx, ellipseParams.ry, 1, ellipseParams.increment * _offset(0.1, _offset(0.4, 1, o), o), o);
-    let o1 = _curve(ap1, null, o);
-    if (!o.disableMultiStroke) {
-        const [ap2] = _computeEllipsePoints(ellipseParams.increment, x, y, ellipseParams.rx, ellipseParams.ry, 1.5, 0, o);
-        const o2 = _curve(ap2, null, o);
-        o1 = o1.concat(o2);
-    }
-    return {
-        estimatedPoints: cp1,
-        opset: { type: 'path', ops: o1 }
-    };
-}
-function random(ops) {
-    if (!ops.randomizer) {
-        ops.randomizer = new Random(ops.seed || 0);
-    }
-    return ops.randomizer.next();
-}
-function _offset(min, max, ops, roughnessGain = 1) {
-    return ops.roughness * roughnessGain * ((random(ops) * (max - min)) + min);
-}
-function _offsetOpt(x, ops, roughnessGain = 1) {
-    return _offset(-x, x, ops, roughnessGain);
-}
-function _doubleLine(x1, y1, x2, y2, o, filling = false) {
-    const singleStroke = filling ? o.disableMultiStrokeFill : o.disableMultiStroke;
-    const o1 = _line(x1, y1, x2, y2, o, true, false);
-    if (singleStroke) {
-        return o1;
-    }
-    const o2 = _line(x1, y1, x2, y2, o, true, true);
-    return o1.concat(o2);
-}
-function _line(x1, y1, x2, y2, o, move, overlay) {
-    const lengthSq = Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2);
-    const length = Math.sqrt(lengthSq);
-    let roughnessGain = 1;
-    if (length < 200) {
-        roughnessGain = 1;
-    }
-    else if (length > 500) {
-        roughnessGain = 0.4;
-    }
-    else {
-        roughnessGain = (-0.0016668) * length + 1.233334;
-    }
-    let offset = o.maxRandomnessOffset || 0;
-    if ((offset * offset * 100) > lengthSq) {
-        offset = length / 10;
-    }
-    const halfOffset = offset / 2;
-    const divergePoint = 0.2 + random(o) * 0.2;
-    let midDispX = o.bowing * o.maxRandomnessOffset * (y2 - y1) / 200;
-    let midDispY = o.bowing * o.maxRandomnessOffset * (x1 - x2) / 200;
-    midDispX = _offsetOpt(midDispX, o, roughnessGain);
-    midDispY = _offsetOpt(midDispY, o, roughnessGain);
-    const ops = [];
-    const randomHalf = () => _offsetOpt(halfOffset, o, roughnessGain);
-    const randomFull = () => _offsetOpt(offset, o, roughnessGain);
-    if (move) {
-        if (overlay) {
-            ops.push({
-                op: 'move', data: [
-                    x1 + randomHalf(),
-                    y1 + randomHalf()
-                ]
-            });
-        }
-        else {
-            ops.push({
-                op: 'move', data: [
-                    x1 + _offsetOpt(offset, o, roughnessGain),
-                    y1 + _offsetOpt(offset, o, roughnessGain)
-                ]
-            });
-        }
-    }
-    if (overlay) {
-        ops.push({
-            op: 'bcurveTo', data: [
-                midDispX + x1 + (x2 - x1) * divergePoint + randomHalf(),
-                midDispY + y1 + (y2 - y1) * divergePoint + randomHalf(),
-                midDispX + x1 + 2 * (x2 - x1) * divergePoint + randomHalf(),
-                midDispY + y1 + 2 * (y2 - y1) * divergePoint + randomHalf(),
-                x2 + randomHalf(),
-                y2 + randomHalf()
-            ]
-        });
-    }
-    else {
-        ops.push({
-            op: 'bcurveTo', data: [
-                midDispX + x1 + (x2 - x1) * divergePoint + randomFull(),
-                midDispY + y1 + (y2 - y1) * divergePoint + randomFull(),
-                midDispX + x1 + 2 * (x2 - x1) * divergePoint + randomFull(),
-                midDispY + y1 + 2 * (y2 - y1) * divergePoint + randomFull(),
-                x2 + randomFull(),
-                y2 + randomFull()
-            ]
-        });
-    }
-    return ops;
-}
-function _curve(points, closePoint, o) {
-    const len = points.length;
-    const ops = [];
-    if (len > 3) {
-        const b = [];
-        const s = 1 - o.curveTightness;
-        ops.push({ op: 'move', data: [points[1][0], points[1][1]] });
-        for (let i = 1; (i + 2) < len; i++) {
-            const cachedVertArray = points[i];
-            b[0] = [cachedVertArray[0], cachedVertArray[1]];
-            b[1] = [cachedVertArray[0] + (s * points[i + 1][0] - s * points[i - 1][0]) / 6, cachedVertArray[1] + (s * points[i + 1][1] - s * points[i - 1][1]) / 6];
-            b[2] = [points[i + 1][0] + (s * points[i][0] - s * points[i + 2][0]) / 6, points[i + 1][1] + (s * points[i][1] - s * points[i + 2][1]) / 6];
-            b[3] = [points[i + 1][0], points[i + 1][1]];
-            ops.push({ op: 'bcurveTo', data: [b[1][0], b[1][1], b[2][0], b[2][1], b[3][0], b[3][1]] });
-        }
-        if (closePoint && closePoint.length === 2) {
-            const ro = o.maxRandomnessOffset;
-            ops.push({ op: 'lineTo', data: [closePoint[0] + _offsetOpt(ro, o), closePoint[1] + _offsetOpt(ro, o)] });
-        }
-    }
-    else if (len === 3) {
-        ops.push({ op: 'move', data: [points[1][0], points[1][1]] });
-        ops.push({
-            op: 'bcurveTo', data: [
-                points[1][0], points[1][1],
-                points[2][0], points[2][1],
-                points[2][0], points[2][1]
-            ]
-        });
-    }
-    else if (len === 2) {
-        ops.push(..._doubleLine(points[0][0], points[0][1], points[1][0], points[1][1], o));
-    }
-    return ops;
-}
-function _computeEllipsePoints(increment, cx, cy, rx, ry, offset, overlap, o) {
-    const corePoints = [];
-    const allPoints = [];
-    const radOffset = _offsetOpt(0.5, o) - (Math.PI / 2);
-    allPoints.push([
-        _offsetOpt(offset, o) + cx + 0.9 * rx * Math.cos(radOffset - increment),
-        _offsetOpt(offset, o) + cy + 0.9 * ry * Math.sin(radOffset - increment)
-    ]);
-    for (let angle = radOffset; angle < (Math.PI * 2 + radOffset - 0.01); angle = angle + increment) {
-        const p = [
-            _offsetOpt(offset, o) + cx + rx * Math.cos(angle),
-            _offsetOpt(offset, o) + cy + ry * Math.sin(angle)
-        ];
-        corePoints.push(p);
-        allPoints.push(p);
-    }
-    allPoints.push([
-        _offsetOpt(offset, o) + cx + rx * Math.cos(radOffset + Math.PI * 2 + overlap * 0.5),
-        _offsetOpt(offset, o) + cy + ry * Math.sin(radOffset + Math.PI * 2 + overlap * 0.5)
-    ]);
-    allPoints.push([
-        _offsetOpt(offset, o) + cx + 0.98 * rx * Math.cos(radOffset + overlap),
-        _offsetOpt(offset, o) + cy + 0.98 * ry * Math.sin(radOffset + overlap)
-    ]);
-    allPoints.push([
-        _offsetOpt(offset, o) + cx + 0.9 * rx * Math.cos(radOffset + overlap * 0.5),
-        _offsetOpt(offset, o) + cy + 0.9 * ry * Math.sin(radOffset + overlap * 0.5)
-    ]);
-    return [allPoints, corePoints];
-}
-
-const defaultOptions = {
-    maxRandomnessOffset: 2,
-    roughness: 1.5,
-    bowing: 1,
-    stroke: '#000',
-    strokeWidth: 1.5,
-    curveTightness: 0,
-    curveFitting: 0.95,
-    curveStepCount: 9,
-    fillStyle: 'hachure',
-    fillWeight: -1,
-    hachureAngle: -41,
-    hachureGap: -1,
-    dashOffset: -1,
-    dashGap: -1,
-    zigzagOffset: -1,
-    seed: 0,
-    combineNestedSvgPaths: false,
-    disableMultiStroke: false,
-    disableMultiStrokeFill: false
-};
-const singleStrokeOptions = JSON.parse(JSON.stringify(defaultOptions));
-singleStrokeOptions.disableMultiStroke = true;
-const highlightOptions = JSON.parse(JSON.stringify(defaultOptions));
-highlightOptions.roughness = 3;
-highlightOptions.disableMultiStroke = true;
-function renderAnnotation(svg, rect, config, animationGroupDelay) {
-    const opList = [];
-    let strokeWidth = config.strokeWidth || 2;
-    const padding = (config.padding === 0) ? 0 : (config.padding || 5);
-    const animate = (config.animate === undefined) ? true : (!!config.animate);
-    switch (config.type) {
-        case 'underline': {
-            const y = rect.y + rect.h + padding;
-            opList.push(line(rect.x, y, rect.x + rect.w, y, singleStrokeOptions));
-            opList.push(line(rect.x + rect.w, y, rect.x, y, singleStrokeOptions));
-            break;
-        }
-        case 'strike-through': {
-            const y = rect.y + (rect.h / 2);
-            opList.push(line(rect.x, y, rect.x + rect.w, y, singleStrokeOptions));
-            opList.push(line(rect.x + rect.w, y, rect.x, y, singleStrokeOptions));
-            break;
-        }
-        case 'box': {
-            const x = rect.x - padding;
-            const y = rect.y - padding;
-            const width = rect.w + (2 * padding);
-            const height = rect.h + (2 * padding);
-            opList.push(rectangle(x, y, width, height, singleStrokeOptions));
-            opList.push(rectangle(x, y, width, height, singleStrokeOptions));
-            break;
-        }
-        case 'crossed-off': {
-            const x = rect.x;
-            const y = rect.y;
-            const x2 = x + rect.w;
-            const y2 = y + rect.h;
-            opList.push(line(x, y, x2, y2, singleStrokeOptions));
-            opList.push(line(x2, y2, x, y, singleStrokeOptions));
-            opList.push(line(x2, y, x, y2, singleStrokeOptions));
-            opList.push(line(x, y2, x2, y, singleStrokeOptions));
-            break;
-        }
-        case 'circle': {
-            const p2 = padding * 2;
-            const width = rect.w + (2 * p2);
-            const height = rect.h + (2 * p2);
-            const x = rect.x - p2 + (width / 2);
-            const y = rect.y - p2 + (height / 2);
-            opList.push(ellipse(x, y, width, height, defaultOptions));
-            break;
-        }
-        case 'highlight': {
-            strokeWidth = rect.h * 0.95;
-            const y = rect.y + (rect.h / 2);
-            opList.push(line(rect.x, y, rect.x + rect.w, y, highlightOptions));
-            opList.push(line(rect.x + rect.w, y, rect.x, y, highlightOptions));
-            break;
-        }
-    }
-    if (opList.length) {
-        const pathStrings = opsToPath(opList);
-        const lengths = [];
-        const pathElements = [];
-        let totalLength = 0;
-        const totalDuration = config.animationDuration === 0 ? 0 : (config.animationDuration || DEFAULT_ANIMATION_DURATION);
-        const initialDelay = (config.animationDelay === 0 ? 0 : (config.animationDelay || 0)) + (animationGroupDelay || 0);
-        for (const d of pathStrings) {
-            const path = document.createElementNS(SVG_NS, 'path');
-            path.setAttribute('d', d);
-            path.setAttribute('fill', 'none');
-            path.setAttribute('stroke', config.color || 'currentColor');
-            path.setAttribute('stroke-width', `${strokeWidth}`);
-            if (animate) {
-                const length = path.getTotalLength();
-                lengths.push(length);
-                totalLength += length;
-            }
-            svg.appendChild(path);
-            pathElements.push(path);
-        }
-        if (animate) {
-            let durationOffset = 0;
-            for (let i = 0; i < pathElements.length; i++) {
-                const path = pathElements[i];
-                const length = lengths[i];
-                const duration = totalLength ? (totalDuration * (length / totalLength)) : 0;
-                const delay = initialDelay + durationOffset;
-                const style = path.style;
-                style.strokeDashoffset = `${length}`;
-                style.strokeDasharray = `${length}`;
-                style.animation = `rough-notation-dash ${duration}ms ease-out ${delay}ms forwards`;
-                durationOffset += duration;
-            }
-        }
-    }
-}
-function opsToPath(opList) {
-    const paths = [];
-    for (const drawing of opList) {
-        let path = '';
-        for (const item of drawing.ops) {
-            const data = item.data;
-            switch (item.op) {
-                case 'move':
-                    if (path.trim()) {
-                        paths.push(path.trim());
-                    }
-                    path = `M${data[0]} ${data[1]} `;
-                    break;
-                case 'bcurveTo':
-                    path += `C${data[0]} ${data[1]}, ${data[2]} ${data[3]}, ${data[4]} ${data[5]} `;
-                    break;
-                case 'lineTo':
-                    path += `L${data[0]} ${data[1]} `;
-                    break;
-            }
-        }
-        if (path.trim()) {
-            paths.push(path.trim());
-        }
-    }
-    return paths;
-}
-
-function ensureKeyframes() {
-    if (!window.__rough_notation_keyframe_styles) {
-        const style = window.__rough_notation_keyframe_styles = document.createElement('style');
-        style.textContent = `
-    @keyframes rough-notation-dash {
-      to {
-        stroke-dashoffset: 0;
-      }
-    }
-    `;
-        document.head.appendChild(style);
-    }
-}
-
-class RoughAnnotationImpl {
-    constructor(e, config) {
-        this._state = 'unattached';
-        this._resizing = false;
-        this._animationGroupDelay = 0;
-        this._resizeListener = () => {
-            if (!this._resizing) {
-                this._resizing = true;
-                setTimeout(() => {
-                    this._resizing = false;
-                    if (this._state === 'showing') {
-                        const newSize = this.computeSize();
-                        if (newSize && this.hasRectChanged(newSize)) {
-                            this.show();
-                        }
-                    }
-                }, 400);
-            }
-        };
-        this._e = e;
-        this._config = config;
-        this.attach();
-    }
-    get config() {
-        return this._config;
-    }
-    attach() {
-        if (this._state === 'unattached' && this._e.parentElement) {
-            ensureKeyframes();
-            const svg = this._svg = document.createElementNS(SVG_NS, 'svg');
-            const style = svg.style;
-            style.position = 'absolute';
-            style.top = '0';
-            style.left = '0';
-            style.overflow = 'visible';
-            style.pointerEvents = 'none';
-            style.width = '100px';
-            style.height = '100px';
-            const prepend = this._config.type === 'highlight';
-            this._e.insertAdjacentElement(prepend ? 'beforebegin' : 'afterend', svg);
-            this._state = 'not-showing';
-            // ensure e is positioned
-            if (prepend) {
-                const computedPos = window.getComputedStyle(this._e).position;
-                const unpositioned = (!computedPos) || (computedPos === 'static');
-                if (unpositioned) {
-                    this._e.style.position = 'relative';
-                }
-            }
-            this.attachListeners();
-        }
-    }
-    detachListeners() {
-        window.removeEventListener('resize', this._resizeListener);
-        if (this._resizeObserver) {
-            this._resizeObserver.unobserve(this._e);
-        }
-    }
-    attachListeners() {
-        this.detachListeners();
-        window.addEventListener('resize', this._resizeListener, { passive: true });
-        if ((!this._resizeObserver) && ('ResizeObserver' in window)) {
-            this._resizeObserver = new window.ResizeObserver((entries) => {
-                for (const entry of entries) {
-                    let trigger = true;
-                    if (entry.contentRect) {
-                        const newRect = this.computeSizeWithBounds(entry.contentRect);
-                        if (newRect && (!this.hasRectChanged(newRect))) {
-                            trigger = false;
-                        }
-                    }
-                    if (trigger) {
-                        this._resizeListener();
-                    }
-                }
-            });
-        }
-        if (this._resizeObserver) {
-            this._resizeObserver.observe(this._e);
-        }
-    }
-    sameInteger(a, b) {
-        return Math.round(a) === Math.round(b);
-    }
-    hasRectChanged(rect) {
-        if (this._lastSize && rect) {
-            return !(this.sameInteger(rect.x, this._lastSize.x) &&
-                this.sameInteger(rect.y, this._lastSize.y) &&
-                this.sameInteger(rect.w, this._lastSize.w) &&
-                this.sameInteger(rect.h, this._lastSize.h));
-        }
-        return true;
-    }
-    isShowing() {
-        return (this._state !== 'not-showing');
-    }
-    show() {
-        switch (this._state) {
-            case 'unattached':
-                break;
-            case 'showing':
-                this.hide();
-                this.show();
-                break;
-            case 'not-showing':
-                this.attach();
-                if (this._svg) {
-                    this.render(this._svg);
-                }
-                break;
-        }
-    }
-    hide() {
-        if (this._svg) {
-            while (this._svg.lastChild) {
-                this._svg.removeChild(this._svg.lastChild);
-            }
-        }
-        this._state = 'not-showing';
-    }
-    remove() {
-        if (this._svg && this._svg.parentElement) {
-            this._svg.parentElement.removeChild(this._svg);
-        }
-        this._svg = undefined;
-        this._state = 'unattached';
-        this.detachListeners();
-    }
-    render(svg) {
-        const rect = this.computeSize();
-        if (rect) {
-            renderAnnotation(svg, rect, this._config, this._animationGroupDelay);
-            this._lastSize = rect;
-            this._state = 'showing';
-        }
-    }
-    computeSize() {
-        return this.computeSizeWithBounds(this._e.getBoundingClientRect());
-    }
-    computeSizeWithBounds(bounds) {
-        if (this._svg) {
-            const rect1 = this._svg.getBoundingClientRect();
-            const rect2 = bounds;
-            const x = (rect2.x || rect2.left) - (rect1.x || rect1.left);
-            const y = (rect2.y || rect2.top) - (rect1.y || rect1.top);
-            const w = rect2.width;
-            const h = rect2.height;
-            return { x, y, w, h };
-        }
-        return null;
-    }
-}
-function annotate(element, config) {
-    return new RoughAnnotationImpl(element, config);
-}
 function annotationGroup(annotations) {
     let delay = 0;
     for (const a of annotations) {
         const ai = a;
         ai._animationGroupDelay = delay;
-        const duration = ai.config.animationDuration === 0 ? 0 : (ai.config.animationDuration || DEFAULT_ANIMATION_DURATION);
+        const duration = ai.animationDuration === 0 ? 0 : (ai.animationDuration || DEFAULT_ANIMATION_DURATION);
         delay += duration;
     }
     const list = [...annotations];
@@ -673,20 +128,17 @@ function useGroupContext(annotation) {
 }
 
 function RoughNotation(_a) {
-    var _b = _a.animate, animate = _b === void 0 ? true : _b, _c = _a.animationDelay, animationDelay = _c === void 0 ? 0 : _c, _d = _a.animationDuration, animationDuration = _d === void 0 ? 800 : _d, children = _a.children, color = _a.color, _e = _a.customElement, customElement = _e === void 0 ? "span" : _e, getAnnotationObject = _a.getAnnotationObject, _f = _a.padding, padding = _f === void 0 ? 5 : _f, _g = _a.show, show = _g === void 0 ? false : _g, _h = _a.strokeWidth, strokeWidth = _h === void 0 ? 1 : _h, type = _a.type, rest = __rest(_a, ["animate", "animationDelay", "animationDuration", "children", "color", "customElement", "getAnnotationObject", "padding", "show", "strokeWidth", "type"]);
+    var _b = _a.animate, animate = _b === void 0 ? true : _b, _c = _a.animationDelay, animationDelay = _c === void 0 ? 0 : _c, _d = _a.animationDuration, animationDuration = _d === void 0 ? 800 : _d, children = _a.children, color = _a.color, _e = _a.customElement, customElement = _e === void 0 ? "span" : _e, getAnnotationObject = _a.getAnnotationObject, _f = _a.iterations, iterations = _f === void 0 ? 2 : _f, _g = _a.padding, padding = _g === void 0 ? 5 : _g, _h = _a.show, show = _h === void 0 ? false : _h, _j = _a.strokeWidth, strokeWidth = _j === void 0 ? 1 : _j, type = _a.type, rest = __rest(_a, ["animate", "animationDelay", "animationDuration", "children", "color", "customElement", "getAnnotationObject", "iterations", "padding", "show", "strokeWidth", "type"]);
     var element = React.useRef(document.createElement("span"));
-    var annotation = React.useRef({
-        remove: function () { },
-        show: function () { },
-        hide: function () { },
-    });
+    var annotation = React.useRef();
     useGroupContext(annotation);
     React.useEffect(function () {
-        annotation.current = annotate(element.current, {
+        annotation.current = m(element.current, {
             animate: animate,
             animationDelay: animationDelay,
             animationDuration: animationDuration,
             color: color,
+            iterations: iterations,
             padding: padding,
             strokeWidth: strokeWidth,
             type: type,
@@ -695,28 +147,40 @@ function RoughNotation(_a) {
             getAnnotationObject(annotation.current);
         }
         return function () {
-            annotation.current.remove();
+            var _a, _b;
+            (_b = (_a = annotation.current) === null || _a === void 0 ? void 0 : _a.remove) === null || _b === void 0 ? void 0 : _b.call(_a);
         };
+    }, []);
+    React.useEffect(function () {
+        var _a, _b, _c, _d;
+        if (show) {
+            (_b = (_a = annotation.current) === null || _a === void 0 ? void 0 : _a.show) === null || _b === void 0 ? void 0 : _b.call(_a);
+        }
+        else {
+            (_d = (_c = annotation.current) === null || _c === void 0 ? void 0 : _c.hide) === null || _d === void 0 ? void 0 : _d.call(_c);
+        }
+    }, [annotation, show]);
+    React.useEffect(function () {
+        if (annotation.current) {
+            annotation.current.animate = animate;
+            annotation.current.animationDuration = animationDuration;
+            annotation.current.color = color;
+            annotation.current.strokeWidth = strokeWidth;
+            annotation.current.padding = padding;
+        }
     }, [
+        annotation,
         animate,
         animationDelay,
         animationDuration,
         color,
-        padding,
         strokeWidth,
-        type,
-        getAnnotationObject,
+        padding,
     ]);
-    React.useEffect(function () {
-        if (show) {
-            annotation.current.show();
-        }
-        else {
-            annotation.current.hide();
-        }
-    }, [show, annotation]);
     return React__default.createElement(customElement, __assign({ ref: element }, rest), children);
 }
+
+console.log("0.3.0");
 
 exports.RoughNotation = RoughNotation;
 exports.RoughNotationGroup = RoughNotationGroup;

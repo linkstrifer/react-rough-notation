@@ -1,11 +1,11 @@
 import React from "react";
 import { useRef, useEffect } from "react";
 
-import { annotate } from "rough-notation/lib/rough-notation";
+import { annotate } from "rough-notation";
 
 import { useGroupContext } from "../RoughNotationGroup/RoughNotationGroup";
 
-import { RoughNotationProps } from "./types";
+import { RoughNotationProps, Annotation } from "./types";
 
 function RoughNotation({
   animate = true,
@@ -15,6 +15,7 @@ function RoughNotation({
   color,
   customElement = "span",
   getAnnotationObject,
+  iterations = 2,
   padding = 5,
   show = false,
   strokeWidth = 1,
@@ -22,11 +23,7 @@ function RoughNotation({
   ...rest
 }: RoughNotationProps) {
   const element = useRef<HTMLElement>(document.createElement("span"));
-  const annotation = useRef({
-    remove: () => {},
-    show: () => {},
-    hide: () => {},
-  });
+  const annotation = useRef<Annotation>();
 
   useGroupContext(annotation);
 
@@ -36,6 +33,7 @@ function RoughNotation({
       animationDelay,
       animationDuration,
       color,
+      iterations,
       padding,
       strokeWidth,
       type,
@@ -46,26 +44,35 @@ function RoughNotation({
     }
 
     return () => {
-      annotation.current.remove();
+      annotation.current?.remove?.();
     };
+  }, []);
+
+  useEffect(() => {
+    if (show) {
+      annotation.current?.show?.();
+    } else {
+      annotation.current?.hide?.();
+    }
+  }, [annotation, show]);
+
+  useEffect(() => {
+    if (annotation.current) {
+      annotation.current.animate = animate;
+      annotation.current.animationDuration = animationDuration;
+      annotation.current.color = color;
+      annotation.current.strokeWidth = strokeWidth;
+      annotation.current.padding = padding;
+    }
   }, [
+    annotation,
     animate,
     animationDelay,
     animationDuration,
     color,
-    padding,
     strokeWidth,
-    type,
-    getAnnotationObject,
+    padding,
   ]);
-
-  useEffect(() => {
-    if (show) {
-      annotation.current.show();
-    } else {
-      annotation.current.hide();
-    }
-  }, [show, annotation]);
 
   return React.createElement(
     customElement,

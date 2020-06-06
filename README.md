@@ -18,6 +18,7 @@ This is a React wrapper for [RoughNotation](https://roughnotation.com/), a small
     - [Usage](#usage)
     - [Props](#props)
     - [Type values](#type-values)
+    - [Updating Styles](#updating-styles)
   - [RoughNotationGroup Component](#roughnotationgroup-component)
     - [Usage](#usage)
     - [Props](#props)
@@ -56,18 +57,18 @@ This is the main component, is a span element by default but you can change the 
 
 Any unlisted prop will be pass to the component so you can use any react prop to handle interactions or styling.
 
-| name                | type     | default                                                        | description                                                                                                                                                               |
-| ------------------- | -------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| animate             | boolean  | true                                                           | Turn on/off animation when annotating                                                                                                                                     |
-| animationDelay      | number   | 0                                                              | Delay in animation in milliseconds                                                                                                                                        |
-| animationDuration   | number   | 800                                                            | Duration of the animation in milliseconds                                                                                                                                 |
-| color               | string   |                                                                | String value representing the color of the annotation sketch                                                                                                              |
-| customElement       | string   | span                                                           | Element wrapper tagName                                                                                                                                                   |
-| getAnnotationObject | function | (annotation) => {}                                             | Callback function called after annotation init, it will receive the javascript [annotation object](https://github.com/pshihn/rough-notation#annotation-object) as a param |
-| padding             | 5        | number                                                         | Padding between the element and roughly where the annotation is drawn                                                                                                     |
-| show                | boolean  | false                                                          | Show/hide the annotation                                                                                                                                                  |
-| strokeWidth         | number   | 1                                                              | Width of the annotation strokes                                                                                                                                           |
-| type                | enum     | underline, box, circle, highlight, strike-through, crossed-off | This is a mandatory field. It sets the annotation style                                                                                                                   |
+| name                | type                                                             | default                                                                                                                                                                               | description                                                                                                                                                                                                                                                                                  |
+| ------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| animate             | `boolean`                                                        | `true`                                                                                                                                                                                | Turn on/off animation when annotating                                                                                                                                                                                                                                                        |
+| animationDelay      | `number`                                                         | `0`                                                                                                                                                                                   | Delay in animation in milliseconds                                                                                                                                                                                                                                                           |
+| animationDuration   | `number`                                                         | `800`                                                                                                                                                                                 | Duration of the animation in milliseconds                                                                                                                                                                                                                                                    |
+| color               | `string`                                                         |                                                                                                                                                                                       | String value representing the color of the annotation sketch                                                                                                                                                                                                                                 |
+| customElement       | `string`                                                         | `span`                                                                                                                                                                                | Element wrapper tagName                                                                                                                                                                                                                                                                      |
+| getAnnotationObject | `function`                                                       | `(annotation) => {}`                                                                                                                                                                  | Callback function called after annotation init, it will receive the javascript [annotation object](https://github.com/pshihn/rough-notation#annotation-object) as a param                                                                                                                    |
+| iterations          | `number`                                                         | `2`                                                                                                                                                                                   | By default annotations are drawn in two iterations, e.g. when underlining, drawing from left to right and then back from right to left. Setting this property can let you configure the number of iterations.                                                                                |
+| padding             | `number`, `[top, right, bottom, left]`, `[vertical, horizontal]` | `5`                                                                                                                                                                                   | Padding in pixels between the element and roughly where the annotation is drawn. If you wish to specify different `top`, `left`, `right`, `bottom` paddings, you can set the value to an array akin to CSS style padding `[top, right, bottom, left]` or just `[top & bottom, left & right]` |
+| show                | `boolean`                                                        | `false`                                                                                                                                                                               | Show/hide the annotation                                                                                                                                                                                                                                                                     |
+| strokeWidth         | `number`                                                         | `1 | Width of the annotation strokes | | type |`enum`|`underline`,`box`,`circle`,`highlight`,`strike-through`,`crossed-off` | This is a mandatory field. It sets the annotation style |
 
 ### Type values
 
@@ -79,6 +80,20 @@ Any unlisted prop will be pass to the component so you can use any react prop to
 | highlight      | Creates a highlight effect as if maked by a highlighter |
 | strike-through | This style draws a box around the element               |
 | crossed-off    | This style draws a box around the element               |
+
+### Updating Styles
+
+Some props can be changed after the initialization without re-rendering the annotation. i.e: if you like to change the color, just change the `color` prop, here is the complete list:
+
+| Prop              |
+| ----------------- |
+| animated          |
+| animationDuration |
+| color             |
+| padding           |
+| strokeWidth       |
+
+_Note: the type of the annotation cannot be changed. Create a new annotation for that._
 
 ## RoughNotationGroup Component
 

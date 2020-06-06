@@ -8,11 +8,11 @@
     "start": "rollup -c -w"
   },
   "dependencies": {
-    "rough-notation": "^0.2.0"
+    "rough-notation": "0.3.0"
   },
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^8.0.0",

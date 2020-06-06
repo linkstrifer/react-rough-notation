@@ -6,16 +6,26 @@ export type types =
   | "strike-through"
   | "crossed-off";
 
-export interface RoughNotationProps {
+interface RoughNotationProperties {
   animate?: boolean;
   animationDelay?: number;
   animationDuration?: number;
-  children: any;
   color?: string;
+  iterations?: number;
+  padding?: number | [number, number, number, number] | [number, number];
+  strokeWidth?: number;
+}
+
+export interface RoughNotationProps extends RoughNotationProperties {
+  children: any;
   customElement?: string;
   getAnnotationObject?: Function;
-  padding?: number;
   show?: boolean;
-  strokeWidth?: number;
   type: types;
+}
+
+export interface Annotation extends RoughNotationProperties {
+  hide?: Function;
+  remove?: Function;
+  show?: Function;
 }
