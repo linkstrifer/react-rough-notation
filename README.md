@@ -117,7 +117,7 @@ This is a wrapper for multiple annotations, it will trigger the `show()` method 
 
 ## Playground
 
-You can find a [CodeSandbox demo here](https://codesandbox.io/s/react-rough-notation-playground-gvkq2?file=/src/App.js)
+You can find a [CodeSandbox demo here](https://codesandbox.io/s/github/linkstrifer/react-rough-notation-playground)
 
 ## TODO
 
