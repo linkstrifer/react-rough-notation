@@ -1,7 +1,7 @@
 import React from "react";
 import { createContext, useContext, useEffect, useReducer } from "react";
 
-import { annotationGroup } from "rough-notation/lib/rough-notation";
+import { annotationGroup } from "rough-notation";
 
 import {
   RoughNotationGroupProps,
