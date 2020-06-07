@@ -5,6 +5,7 @@ interface RoughNotationProperties {
     animationDuration?: number;
     color?: string;
     iterations?: number;
+    order?: number | string;
     padding?: number | [number, number, number, number] | [number, number];
     strokeWidth?: number;
 }

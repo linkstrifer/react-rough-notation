@@ -4,11 +4,12 @@ import { createContext, useContext, useEffect, useReducer } from "react";
 import { annotationGroup } from "rough-notation";
 
 import {
+  Action,
+  Annotation,
+  Dispatch,
+  Payload,
   RoughNotationGroupProps,
   State,
-  Action,
-  Dispatch,
-  Annotation,
 } from "./types";
 
 const GroupContext = createContext<State | null>(null);
@@ -21,9 +22,43 @@ const initialState: State = {
 function reducer(state: State, { type, payload }: Action) {
   switch (type) {
     case "ADD":
+      let annotations = [...state.annotations, payload];
+
+      const annotationsToSort = annotations.reduce(
+        (toSort, annotation) => {
+          const newAnnotations: {
+            withOrder: Payload[];
+            withoutOrder: Payload[];
+          } = {
+            ...toSort,
+          };
+
+          if (annotation.order !== undefined) {
+            newAnnotations.withOrder = [
+              ...newAnnotations.withOrder,
+              annotation,
+            ].sort((a, b) => a.order! - b.order!);
+          } else {
+            newAnnotations.withoutOrder = [
+              ...newAnnotations.withoutOrder,
+              annotation,
+            ];
+          }
+
+          return newAnnotations;
+        },
+        {
+          withOrder: [],
+          withoutOrder: [],
+        }
+      );
+
       return {
         ...state,
-        annotations: [...state.annotations, payload],
+        annotations: [
+          ...annotationsToSort.withOrder,
+          ...annotationsToSort.withoutOrder,
+        ],
       };
     default:
       return state;
@@ -35,7 +70,7 @@ function RoughNotationGroup({ children, show }: RoughNotationGroupProps) {
 
   useEffect(() => {
     const group = annotationGroup(
-      state.annotations.map(({ current }) => current)
+      state.annotations.map(({ annotation }) => annotation.current)
     );
 
     if (show) {
@@ -54,7 +89,10 @@ function RoughNotationGroup({ children, show }: RoughNotationGroupProps) {
   );
 }
 
-export function useGroupContext(annotation: Annotation) {
+export function useGroupContext(
+  annotation: Annotation,
+  order: number | undefined
+) {
   const context = useContext(GroupContext);
   const dispatch = useContext(GroupDispatchContext);
 
@@ -66,7 +104,7 @@ export function useGroupContext(annotation: Annotation) {
     if (dispatch) {
       dispatch({
         type: "ADD",
-        payload: annotation,
+        payload: { annotation, order },
       });
     }
   }, []);

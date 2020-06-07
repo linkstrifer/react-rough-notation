@@ -8,12 +8,17 @@ export type Annotation = {
 };
 
 export type State = {
-  annotations: Array<Annotation>;
+  annotations: Array<Payload>;
+};
+
+export type Payload = {
+  annotation: Annotation;
+  order: number | undefined;
 };
 
 export type Action = {
   type: "ADD";
-  payload: Annotation;
+  payload: Payload;
 };
 
 export type Dispatch = (action: Action) => void;

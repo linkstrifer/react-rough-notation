@@ -1,5 +1,7 @@
 # Rough Notation React (Wrapper)
 
+![npm](https://img.shields.io/npm/v/react-rough-notation?style=for-the-badge)
+
 This is a React wrapper for [RoughNotation](https://roughnotation.com/), a small JavaScript library to create and animate annotations on a web page.
 
 - [Visit website to see it in action](https://roughnotation.com/)
@@ -22,6 +24,7 @@ This is a React wrapper for [RoughNotation](https://roughnotation.com/), a small
   - [RoughNotationGroup Component](#roughnotationgroup-component)
     - [Usage](#usage)
     - [Props](#props)
+    - [Custom order](#custom-order)
   - [Playground](#playground)
   - [TODO](#todo)
 
@@ -66,6 +69,7 @@ Any unlisted prop will be pass to the component so you can use any react prop to
 | customElement       | `string`                                                         | `span`                                                                                                                                                                                | Element wrapper tagName                                                                                                                                                                                                                                                                      |
 | getAnnotationObject | `function`                                                       | `(annotation) => {}`                                                                                                                                                                  | Callback function called after annotation init, it will receive the javascript [annotation object](https://github.com/pshihn/rough-notation#annotation-object) as a param                                                                                                                    |
 | iterations          | `number`                                                         | `2`                                                                                                                                                                                   | By default annotations are drawn in two iterations, e.g. when underlining, drawing from left to right and then back from right to left. Setting this property can let you configure the number of iterations.                                                                                |
+| order               | `number`, `string`                                               |                                                                                                                                                                                       | Annotation order to animate if is inside an Annotation Group                                                                                                                                                                                                                                 |
 | padding             | `number`, `[top, right, bottom, left]`, `[vertical, horizontal]` | `5`                                                                                                                                                                                   | Padding in pixels between the element and roughly where the annotation is drawn. If you wish to specify different `top`, `left`, `right`, `bottom` paddings, you can set the value to an array akin to CSS style padding `[top, right, bottom, left]` or just `[top & bottom, left & right]` |
 | show                | `boolean`                                                        | `false`                                                                                                                                                                               | Show/hide the annotation                                                                                                                                                                                                                                                                     |
 | strokeWidth         | `number`                                                         | `1 | Width of the annotation strokes | | type |`enum`|`underline`,`box`,`circle`,`highlight`,`strike-through`,`crossed-off` | This is a mandatory field. It sets the annotation style |
@@ -115,12 +119,33 @@ This is a wrapper for multiple annotations, it will trigger the `show()` method 
 | ---- | ------- | ------- | -------------------------- |
 | show | boolean |         | show/hides the annotations |
 
+### Custom order
+
+If you need to trigger annotations in a specific order, use the `order` prop in each `RoughAnnotation` component.
+
+i.e: Reverse order
+
+```jsx
+<RoughNotationGroup show={state.show}>
+  <RoughNotation type="underline" order="3">
+    Hello,
+  </RoughNotation>
+  <RoughNotation type="underline" order="2">
+    This is
+  </RoughNotation>
+  <RoughNotation type="underline" order="1">
+    a Test
+  </RoughNotation>
+</RoughNotationGroup>
+```
+
+_Note: It will annotate first the components with the `order` prop, and then the ones without it._
+
 ## Playground
 
 You can find a [CodeSandbox demo here](https://codesandbox.io/s/github/linkstrifer/react-rough-notation-playground)
 
 ## TODO
 
-- [ ] Add group annotation custom order support
 - [ ] Auto compile and publish to npm
 - [ ] Testing

@@ -16,6 +16,7 @@ function RoughNotation({
   customElement = "span",
   getAnnotationObject,
   iterations = 2,
+  order,
   padding = 5,
   show = false,
   strokeWidth = 1,
@@ -25,7 +26,10 @@ function RoughNotation({
   const element = useRef<HTMLElement>(document.createElement("span"));
   const annotation = useRef<Annotation>();
 
-  useGroupContext(annotation);
+  useGroupContext(
+    annotation,
+    typeof order === "string" ? parseInt(order) : order
+  );
 
   useEffect(() => {
     annotation.current = annotate(element.current, {
