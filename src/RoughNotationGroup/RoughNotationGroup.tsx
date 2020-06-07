@@ -33,7 +33,7 @@ function reducer(state: State, { type, payload }: Action) {
             ...toSort,
           };
 
-          if (annotation.order !== undefined) {
+          if (typeof annotation.order === "number") {
             newAnnotations.withOrder = [
               ...newAnnotations.withOrder,
               annotation,

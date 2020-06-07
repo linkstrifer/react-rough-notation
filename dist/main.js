@@ -65,7 +65,7 @@ function reducer(state, _a) {
             var annotations = __spreadArrays(state.annotations, [payload]);
             var annotationsToSort = annotations.reduce(function (toSort, annotation) {
                 var newAnnotations = __assign({}, toSort);
-                if (annotation.order !== undefined) {
+                if (typeof annotation.order === "number") {
                     newAnnotations.withOrder = __spreadArrays(newAnnotations.withOrder, [
                         annotation,
                     ]).sort(function (a, b) { return a.order - b.order; });
