@@ -35,8 +35,9 @@
     "url": "git+https://github.com/linkstrifer/react-rough-notation.git"
   },
   "keywords": [
-    "react",
     "annotate",
+    "react-component",
+    "react",
     "rough",
     "sketchy"
   ],
