@@ -11,16 +11,18 @@ function RoughNotation({
   animate = true,
   animationDelay = 0,
   animationDuration = 800,
+  brackets,
   children,
   color,
   customElement = "span",
   getAnnotationObject,
   iterations = 2,
+  multiline = false,
   order,
   padding = 5,
   show = false,
   strokeWidth = 1,
-  type,
+  type = "underline",
   ...rest
 }: RoughNotationProps) {
   const element = useRef<HTMLElement>(document.createElement("span"));
@@ -34,10 +36,11 @@ function RoughNotation({
   useEffect(() => {
     annotation.current = annotate(element.current, {
       animate,
-      animationDelay,
       animationDuration,
+      brackets,
       color,
       iterations,
+      multiline,
       padding,
       strokeWidth,
       type,
@@ -54,11 +57,13 @@ function RoughNotation({
 
   useEffect(() => {
     if (show) {
-      annotation.current?.show?.();
+      setTimeout(() => {
+        annotation.current?.show?.();
+      }, animationDelay);
     } else {
       annotation.current?.hide?.();
     }
-  }, [annotation, show]);
+  }, [annotation, show, animationDelay]);
 
   useEffect(() => {
     if (annotation.current) {
@@ -68,15 +73,7 @@ function RoughNotation({
       annotation.current.strokeWidth = strokeWidth;
       annotation.current.padding = padding;
     }
-  }, [
-    annotation,
-    animate,
-    animationDelay,
-    animationDuration,
-    color,
-    strokeWidth,
-    padding,
-  ]);
+  }, [annotation, animate, animationDuration, color, strokeWidth, padding]);
 
   return React.createElement(
     customElement,

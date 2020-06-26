@@ -8,7 +8,7 @@
     "start": "rollup -c -w"
   },
   "dependencies": {
-    "rough-notation": "0.3.1"
+    "rough-notation": "^0.4.0"
   },
   "peerDependencies": {
     "react": "^16.13.1",
@@ -45,5 +45,8 @@
   "bugs": {
     "url": "https://github.com/linkstrifer/react-rough-notation/issues"
   },
-  "homepage": "https://github.com/linkstrifer/react-rough-notation#readme"
+  "homepage": "https://github.com/linkstrifer/react-rough-notation#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
 }
