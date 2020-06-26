@@ -44,9 +44,5 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/linkstrifer/react-rough-notation/issues"
-  },
-  "homepage": "https://github.com/linkstrifer/react-rough-notation#readme",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   }
 }
