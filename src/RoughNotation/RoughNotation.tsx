@@ -25,7 +25,7 @@ function RoughNotation({
   type = "underline",
   ...rest
 }: RoughNotationProps) {
-  const element = useRef<HTMLElement>(document.createElement("span"));
+  const element = useRef<HTMLElement>(null);
   const annotation = useRef<Annotation>();
 
   useGroupContext(
@@ -34,7 +34,7 @@ function RoughNotation({
   );
 
   useEffect(() => {
-    annotation.current = annotate(element.current, {
+    annotation.current = annotate(element.current!, {
       animate,
       animationDuration,
       brackets,
