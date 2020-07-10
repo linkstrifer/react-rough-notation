@@ -25,7 +25,7 @@ const RoughNotation: React.FunctionComponent = ({
   type = 'underline',
   ...rest
 }: RoughNotationProps) => {
-  const element = useRef<HTMLElement>(document.createElement('span'))
+  const element = useRef<HTMLElement>(null)
   const annotation = useRef<Annotation>()
   const initialOptions = useRef({
     animate,
@@ -49,7 +49,7 @@ const RoughNotation: React.FunctionComponent = ({
     const options = initialOptions.current
     const { getAnnotationObject } = options
 
-    annotation.current = annotate(element.current, options)
+    annotation.current = annotate(element.current!, options)
 
     if (getAnnotationObject) {
       getAnnotationObject(annotation.current)
