@@ -1,6 +1,6 @@
 {
   "name": "react-rough-notation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "./dist/main.js",
   "module": "./dist/module.es.js",
   "types": "./dist/index.d.ts",
