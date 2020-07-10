@@ -1,20 +1,20 @@
-import React from "react";
-import { useRef, useEffect } from "react";
+import React from 'react'
+import { useRef, useEffect } from 'react'
 
-import { annotate } from "rough-notation";
+import { annotate } from 'rough-notation'
 
-import { useGroupContext } from "../RoughNotationGroup/RoughNotationGroup";
+import { useGroupContext } from '../RoughNotationGroup/RoughNotationGroup'
 
-import { RoughNotationProps, Annotation } from "./types";
+import { RoughNotationProps, Annotation } from './types'
 
-function RoughNotation({
+const RoughNotation: React.FunctionComponent = ({
   animate = true,
   animationDelay = 0,
   animationDuration = 800,
   brackets,
   children,
   color,
-  customElement = "span",
+  customElement = 'span',
   getAnnotationObject,
   iterations = 2,
   multiline = false,
@@ -22,58 +22,63 @@ function RoughNotation({
   padding = 5,
   show = false,
   strokeWidth = 1,
-  type = "underline",
+  type = 'underline',
   ...rest
-}: RoughNotationProps) {
-  const element = useRef<HTMLElement>(document.createElement("span"));
-  const annotation = useRef<Annotation>();
+}: RoughNotationProps) => {
+  const element = useRef<HTMLElement>(document.createElement('span'))
+  const annotation = useRef<Annotation>()
+  const initialOptions = useRef({
+    animate,
+    animationDuration,
+    brackets,
+    color,
+    getAnnotationObject,
+    iterations,
+    multiline,
+    padding,
+    strokeWidth,
+    type,
+  })
 
   useGroupContext(
     annotation,
-    typeof order === "string" ? parseInt(order) : order
-  );
+    typeof order === 'string' ? parseInt(order) : order
+  )
 
   useEffect(() => {
-    annotation.current = annotate(element.current, {
-      animate,
-      animationDuration,
-      brackets,
-      color,
-      iterations,
-      multiline,
-      padding,
-      strokeWidth,
-      type,
-    });
+    const options = initialOptions.current
+    const { getAnnotationObject } = options
+
+    annotation.current = annotate(element.current, options)
 
     if (getAnnotationObject) {
-      getAnnotationObject(annotation.current);
+      getAnnotationObject(annotation.current)
     }
 
     return () => {
-      annotation.current?.remove?.();
-    };
-  }, []);
+      annotation.current?.remove?.()
+    }
+  }, [])
 
   useEffect(() => {
     if (show) {
       setTimeout(() => {
-        annotation.current?.show?.();
-      }, animationDelay);
+        annotation.current?.show?.()
+      }, animationDelay)
     } else {
-      annotation.current?.hide?.();
+      annotation.current?.hide?.()
     }
-  }, [annotation, show, animationDelay]);
+  }, [annotation, show, animationDelay])
 
   useEffect(() => {
     if (annotation.current) {
-      annotation.current.animate = animate;
-      annotation.current.animationDuration = animationDuration;
-      annotation.current.color = color;
-      annotation.current.strokeWidth = strokeWidth;
-      annotation.current.padding = padding;
+      annotation.current.animate = animate
+      annotation.current.animationDuration = animationDuration
+      annotation.current.color = color
+      annotation.current.strokeWidth = strokeWidth
+      annotation.current.padding = padding
     }
-  }, [annotation, animate, animationDuration, color, strokeWidth, padding]);
+  }, [annotation, animate, animationDuration, color, strokeWidth, padding])
 
   return React.createElement(
     customElement,
@@ -82,7 +87,7 @@ function RoughNotation({
       ...rest,
     },
     children
-  );
+  )
 }
 
-export default RoughNotation;
+export default RoughNotation

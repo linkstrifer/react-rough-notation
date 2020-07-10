@@ -1,2 +1,2 @@
-export { default as RoughNotationGroup } from "./RoughNotationGroup";
-export { RoughNotationGroupProps } from "./types";
+export { default as RoughNotationGroup } from './RoughNotationGroup'
+export { RoughNotationGroupProps } from './types'

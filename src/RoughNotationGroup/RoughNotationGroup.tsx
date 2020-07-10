@@ -1,57 +1,58 @@
-import React from "react";
-import { createContext, useContext, useEffect, useReducer } from "react";
+import React from 'react'
+import { createContext, useContext, useEffect, useReducer, useRef } from 'react'
 
-import { annotationGroup } from "rough-notation";
+import { annotationGroup } from 'rough-notation'
 
 import {
   Action,
-  Annotation,
   Dispatch,
   Payload,
   RoughNotationGroupProps,
   State,
-} from "./types";
+} from './types'
 
-const GroupContext = createContext<State | null>(null);
-const GroupDispatchContext = createContext<Dispatch | null>(null);
+import { Annotation } from '../RoughNotation/types'
+
+const GroupContext = createContext<State | null>(null)
+const GroupDispatchContext = createContext<Dispatch | null>(null)
 
 const initialState: State = {
   annotations: [],
-};
+}
 
 function reducer(state: State, { type, payload }: Action) {
   switch (type) {
-    case "ADD":
-      let annotations = [...state.annotations, payload];
+    case 'ADD': {
+      const annotations = [...state.annotations, payload]
 
       const annotationsToSort = annotations.reduce(
         (toSort, annotation) => {
           const newAnnotations: {
-            withOrder: Payload[];
-            withoutOrder: Payload[];
+            withOrder: Payload[]
+            withoutOrder: Payload[]
           } = {
             ...toSort,
-          };
+          }
 
-          if (typeof annotation.order === "number") {
+          if (typeof annotation.order === 'number') {
             newAnnotations.withOrder = [
               ...newAnnotations.withOrder,
               annotation,
-            ].sort((a, b) => a.order! - b.order!);
+            ].sort((a, b) => a.order! - b.order!)
           } else {
             newAnnotations.withoutOrder = [
               ...newAnnotations.withoutOrder,
               annotation,
-            ];
+            ]
           }
 
-          return newAnnotations;
+          return newAnnotations
         },
         {
           withOrder: [],
           withoutOrder: [],
         }
-      );
+      )
 
       return {
         ...state,
@@ -59,26 +60,30 @@ function reducer(state: State, { type, payload }: Action) {
           ...annotationsToSort.withOrder,
           ...annotationsToSort.withoutOrder,
         ],
-      };
+      }
+    }
     default:
-      return state;
+      return state
   }
 }
 
-function RoughNotationGroup({ children, show }: RoughNotationGroupProps) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+const RoughNotationGroup: React.FunctionComponent = ({
+  children,
+  show,
+}: RoughNotationGroupProps) => {
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(() => {
     const group = annotationGroup(
-      state.annotations.map(({ annotation }) => annotation.current)
-    );
+      state.annotations.map(({ annotation }): Annotation => annotation.current!)
+    )
 
     if (show) {
-      group.show();
+      group.show()
     } else {
-      group.hide();
+      group.hide()
     }
-  }, [show, state]);
+  }, [show, state])
 
   return (
     <GroupContext.Provider value={state}>
@@ -86,30 +91,33 @@ function RoughNotationGroup({ children, show }: RoughNotationGroupProps) {
         {children}
       </GroupDispatchContext.Provider>
     </GroupContext.Provider>
-  );
+  )
 }
 
-export function useGroupContext(
-  annotation: Annotation,
+export const useGroupContext = (
+  annotation: React.RefObject<Annotation | undefined>,
   order: number | undefined
-) {
-  const context = useContext(GroupContext);
-  const dispatch = useContext(GroupDispatchContext);
-
-  if (!context) {
-    return undefined;
-  }
+): void => {
+  const context = useContext(GroupContext)
+  const dispatch = useContext(GroupDispatchContext)
+  const initialProps = useRef({ annotation, context, dispatch, order })
 
   useEffect(() => {
+    const { annotation, context, dispatch, order } = initialProps.current
+
+    if (!context) {
+      return undefined
+    }
+
     if (dispatch) {
       dispatch({
-        type: "ADD",
+        type: 'ADD',
         payload: { annotation, order },
-      });
+      })
     }
-  }, []);
 
-  return;
+    return
+  }, [])
 }
 
-export default RoughNotationGroup;
+export default RoughNotationGroup
