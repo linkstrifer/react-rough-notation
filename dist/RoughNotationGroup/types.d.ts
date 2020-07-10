@@ -1,19 +1,18 @@
+import React from 'react';
+import { Annotation } from '../RoughNotation/types';
 export interface RoughNotationGroupProps {
-    children: any;
+    children: React.ReactNode;
     show?: boolean;
 }
-export declare type Annotation = {
-    current: any;
-};
 export declare type State = {
     annotations: Array<Payload>;
 };
 export declare type Payload = {
-    annotation: Annotation;
+    annotation: React.RefObject<Annotation | undefined>;
     order: number | undefined;
 };
 export declare type Action = {
-    type: "ADD";
+    type: 'ADD';
     payload: Payload;
 };
 export declare type Dispatch = (action: Action) => void;

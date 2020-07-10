@@ -1,5 +1,5 @@
-/// <reference types="react" />
-import { Annotation, RoughNotationGroupProps } from "./types";
-declare function RoughNotationGroup({ children, show }: RoughNotationGroupProps): JSX.Element;
-export declare function useGroupContext(annotation: Annotation, order: number | undefined): undefined;
+import React from 'react';
+import { Annotation } from '../RoughNotation/types';
+declare const RoughNotationGroup: React.FunctionComponent;
+export declare const useGroupContext: (annotation: React.RefObject<Annotation | undefined>, order: number | undefined) => void;
 export default RoughNotationGroup;

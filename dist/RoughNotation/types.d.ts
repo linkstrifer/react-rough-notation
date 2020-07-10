@@ -1,5 +1,6 @@
-export declare type types = "underline" | "box" | "circle" | "highlight" | "strike-through" | "crossed-off" | "bracket";
-declare type brackets = "left" | "right" | "top" | "bottom";
+import React from 'react';
+export declare type types = 'underline' | 'box' | 'circle' | 'highlight' | 'strike-through' | 'crossed-off' | 'bracket';
+declare type brackets = 'left' | 'right' | 'top' | 'bottom';
 interface RoughNotationProperties {
     animate?: boolean;
     animationDelay?: number;
@@ -13,15 +14,19 @@ interface RoughNotationProperties {
     strokeWidth?: number;
 }
 export interface RoughNotationProps extends RoughNotationProperties {
-    children: any;
+    children: React.ReactNode;
     customElement?: string;
-    getAnnotationObject?: Function;
+    getAnnotationObject?: (annotation: Annotation) => void;
     show?: boolean;
     type: types;
 }
 export interface Annotation extends RoughNotationProperties {
-    hide?: Function;
-    remove?: Function;
-    show?: Function;
+    isShowing(): boolean;
+    show(): void;
+    hide(): void;
+    remove(): void;
+}
+export interface Props {
+    children: React.ReactNode;
 }
 export {};
