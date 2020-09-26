@@ -27,6 +27,13 @@ const RoughNotation: React.FunctionComponent = ({
 }: RoughNotationProps) => {
   const element = useRef<HTMLElement>(null)
   const annotation = useRef<Annotation>()
+  const innerVars = useRef<{
+    playing: boolean
+    timeout: null | number
+  }>({
+    playing: false,
+    timeout: null,
+  })
   const initialOptions = useRef({
     animate,
     animationDuration,
@@ -62,13 +69,28 @@ const RoughNotation: React.FunctionComponent = ({
 
   useEffect(() => {
     if (show) {
-      setTimeout(() => {
-        annotation.current?.show?.()
-      }, animationDelay)
+      if (!innerVars.current.timeout) {
+        innerVars.current.timeout = window.setTimeout(() => {
+          innerVars.current.playing = true
+
+          annotation.current?.show?.()
+
+          window.setTimeout(() => {
+            innerVars.current.playing = false
+            innerVars.current.timeout = null
+          }, animationDuration)
+        }, animationDelay)
+      }
     } else {
       annotation.current?.hide?.()
+      innerVars.current.playing = false
+
+      if (innerVars.current.timeout) {
+        clearTimeout(innerVars.current.timeout)
+        innerVars.current.timeout = null
+      }
     }
-  }, [annotation, show, animationDelay])
+  }, [annotation, show, animationDelay, innerVars, animationDuration])
 
   useEffect(() => {
     if (annotation.current) {

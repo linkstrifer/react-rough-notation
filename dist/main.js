@@ -126,6 +126,10 @@ var RoughNotation = function (_a) {
     var _b = _a.animate, animate = _b === void 0 ? true : _b, _c = _a.animationDelay, animationDelay = _c === void 0 ? 0 : _c, _d = _a.animationDuration, animationDuration = _d === void 0 ? 800 : _d, brackets = _a.brackets, children = _a.children, color = _a.color, _e = _a.customElement, customElement = _e === void 0 ? 'span' : _e, getAnnotationObject = _a.getAnnotationObject, _f = _a.iterations, iterations = _f === void 0 ? 2 : _f, _g = _a.multiline, multiline = _g === void 0 ? false : _g, order = _a.order, _h = _a.padding, padding = _h === void 0 ? 5 : _h, _j = _a.show, show = _j === void 0 ? false : _j, _k = _a.strokeWidth, strokeWidth = _k === void 0 ? 1 : _k, _l = _a.type, type = _l === void 0 ? 'underline' : _l, rest = __rest(_a, ["animate", "animationDelay", "animationDuration", "brackets", "children", "color", "customElement", "getAnnotationObject", "iterations", "multiline", "order", "padding", "show", "strokeWidth", "type"]);
     var element = React.useRef(null);
     var annotation = React.useRef();
+    var innerVars = React.useRef({
+        playing: false,
+        timeout: null,
+    });
     var initialOptions = React.useRef({
         animate: animate,
         animationDuration: animationDuration,
@@ -154,15 +158,27 @@ var RoughNotation = function (_a) {
     React.useEffect(function () {
         var _a, _b;
         if (show) {
-            setTimeout(function () {
-                var _a, _b;
-                (_b = (_a = annotation.current) === null || _a === void 0 ? void 0 : _a.show) === null || _b === void 0 ? void 0 : _b.call(_a);
-            }, animationDelay);
+            if (!innerVars.current.timeout) {
+                innerVars.current.timeout = window.setTimeout(function () {
+                    var _a, _b;
+                    innerVars.current.playing = true;
+                    (_b = (_a = annotation.current) === null || _a === void 0 ? void 0 : _a.show) === null || _b === void 0 ? void 0 : _b.call(_a);
+                    window.setTimeout(function () {
+                        innerVars.current.playing = false;
+                        innerVars.current.timeout = null;
+                    }, animationDuration);
+                }, animationDelay);
+            }
         }
         else {
             (_b = (_a = annotation.current) === null || _a === void 0 ? void 0 : _a.hide) === null || _b === void 0 ? void 0 : _b.call(_a);
+            innerVars.current.playing = false;
+            if (innerVars.current.timeout) {
+                clearTimeout(innerVars.current.timeout);
+                innerVars.current.timeout = null;
+            }
         }
-    }, [annotation, show, animationDelay]);
+    }, [annotation, show, animationDelay, innerVars, animationDuration]);
     React.useEffect(function () {
         if (annotation.current) {
             annotation.current.animate = animate;
