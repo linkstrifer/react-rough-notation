@@ -1,3 +1,4 @@
 import React from 'react';
-declare const RoughNotation: React.FunctionComponent;
+import { RoughNotationProps } from './types';
+declare const RoughNotation: React.FunctionComponent<RoughNotationProps>;
 export default RoughNotation;
