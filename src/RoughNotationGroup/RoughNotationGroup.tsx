@@ -67,10 +67,10 @@ function reducer(state: State, { type, payload }: Action) {
   }
 }
 
-const RoughNotationGroup: React.FunctionComponent = ({
+const RoughNotationGroup: React.FunctionComponent<RoughNotationGroupProps> = ({
   children,
   show,
-}: RoughNotationGroupProps) => {
+}) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(() => {

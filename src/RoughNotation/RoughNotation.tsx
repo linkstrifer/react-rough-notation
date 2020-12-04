@@ -7,7 +7,7 @@ import { useGroupContext } from '../RoughNotationGroup/RoughNotationGroup'
 
 import { RoughNotationProps, Annotation } from './types'
 
-const RoughNotation: React.FunctionComponent = ({
+const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
   animate = true,
   animationDelay = 0,
   animationDuration = 800,
@@ -24,7 +24,7 @@ const RoughNotation: React.FunctionComponent = ({
   strokeWidth = 1,
   type = 'underline',
   ...rest
-}: RoughNotationProps) => {
+}) => {
   const element = useRef<HTMLElement>(null)
   const annotation = useRef<Annotation>()
   const innerVars = useRef<{
