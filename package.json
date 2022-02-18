@@ -1,6 +1,6 @@
 {
   "name": "react-rough-notation",
-  "version": "1.0.1",
+  "version": "1.0.2-beta.0",
   "main": "./dist/main.js",
   "module": "./dist/module.es.js",
   "types": "./dist/index.d.ts",
@@ -12,8 +12,8 @@
     "rough-notation": "^0.4.0"
   },
   "peerDependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^13.0.0",
