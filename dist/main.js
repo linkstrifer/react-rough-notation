@@ -88,21 +88,27 @@ function reducer(state, _a) {
 var RoughNotationGroup = function (_a) {
     var children = _a.children, show = _a.show;
     var _b = React.useReducer(reducer, initialState), state = _b[0], dispatch = _b[1];
+    var timeouts = React.useRef([]);
     React.useEffect(function () {
         var nextTimeout = 0;
         state.annotations.forEach(function (_a) {
             var annotation = _a.annotation;
             if (show) {
-                setTimeout(function () {
+                var timeout = setTimeout(function () {
                     annotation.show();
                 }, nextTimeout);
+                timeouts.current.push(timeout);
                 nextTimeout += annotation.getAnnotation().animationDuration || 0;
             }
             else {
                 annotation.hide();
+                timeouts.current.forEach(function (timeout) {
+                    clearTimeout(timeout);
+                    timeouts.current = timeouts.current.filter(function (currentTimeout) { return currentTimeout !== timeout; });
+                });
             }
         });
-    }, [show, state]);
+    }, [show, state, timeouts]);
     return (React__default.createElement(GroupContext.Provider, { value: state },
         React__default.createElement(GroupDispatchContext.Provider, { value: dispatch }, children)));
 };
