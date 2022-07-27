@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useCallback } from 'react'
 
 import { annotate } from 'rough-notation'
 
@@ -46,8 +46,41 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
     type,
   })
 
+  const showAnnotation = useCallback(() => {
+    if (!innerVars.current.timeout) {
+      innerVars.current.timeout = window.setTimeout(() => {
+        innerVars.current.playing = true
+
+        annotation.current?.show?.()
+
+        window.setTimeout(() => {
+          innerVars.current.playing = false
+          innerVars.current.timeout = null
+        }, animationDuration)
+      }, animationDelay)
+    }
+  }, [animationDelay, animationDuration])
+
+  const hideAnnotation = useCallback(() => {
+    annotation.current?.hide?.()
+    innerVars.current.playing = false
+
+    if (innerVars.current.timeout) {
+      clearTimeout(innerVars.current.timeout)
+      innerVars.current.timeout = null
+    }
+  }, [])
+
+  const getAnnotation = useCallback(() => {
+    return annotation.current!
+  }, [annotation])
+
   useGroupContext(
-    annotation,
+    {
+      getAnnotation,
+      show: showAnnotation,
+      hide: hideAnnotation,
+    },
     typeof order === 'string' ? parseInt(order) : order
   )
 
@@ -68,28 +101,19 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
 
   useEffect(() => {
     if (show) {
-      if (!innerVars.current.timeout) {
-        innerVars.current.timeout = window.setTimeout(() => {
-          innerVars.current.playing = true
-
-          annotation.current?.show?.()
-
-          window.setTimeout(() => {
-            innerVars.current.playing = false
-            innerVars.current.timeout = null
-          }, animationDuration)
-        }, animationDelay)
-      }
+      showAnnotation()
     } else {
-      annotation.current?.hide?.()
-      innerVars.current.playing = false
-
-      if (innerVars.current.timeout) {
-        clearTimeout(innerVars.current.timeout)
-        innerVars.current.timeout = null
-      }
+      hideAnnotation()
     }
-  }, [annotation, show, animationDelay, innerVars, animationDuration])
+  }, [
+    annotation,
+    show,
+    animationDelay,
+    innerVars,
+    animationDuration,
+    showAnnotation,
+    hideAnnotation,
+  ])
 
   useEffect(() => {
     if (annotation.current) {

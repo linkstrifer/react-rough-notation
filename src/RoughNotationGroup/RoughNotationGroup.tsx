@@ -1,7 +1,10 @@
-import React from 'react'
-import { createContext, useContext, useEffect, useReducer, useRef } from 'react'
-
-import { annotationGroup } from 'rough-notation'
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+} from 'react'
 
 import {
   Action,
@@ -10,8 +13,6 @@ import {
   RoughNotationGroupProps,
   State,
 } from './types'
-
-import { Annotation } from '../RoughNotation/types'
 
 const GroupContext = createContext<State | null>(null)
 const GroupDispatchContext = createContext<Dispatch | null>(null)
@@ -74,15 +75,19 @@ const RoughNotationGroup: React.FunctionComponent<RoughNotationGroupProps> = ({
   const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(() => {
-    const group = annotationGroup(
-      state.annotations.map(({ annotation }): Annotation => annotation.current!)
-    )
+    let nextTimeout = 0
 
-    if (show) {
-      group.show()
-    } else {
-      group.hide()
-    }
+    state.annotations.forEach(({ annotation }) => {
+      if (show) {
+        setTimeout(() => {
+          annotation.show()
+        }, nextTimeout)
+
+        nextTimeout += annotation.getAnnotation().animationDuration || 0
+      } else {
+        annotation.hide()
+      }
+    })
   }, [show, state])
 
   return (
@@ -95,28 +100,31 @@ const RoughNotationGroup: React.FunctionComponent<RoughNotationGroupProps> = ({
 }
 
 export const useGroupContext = (
-  annotation: React.RefObject<Annotation | undefined>,
-  order: number | undefined
+  annotation: Payload['annotation'],
+  order: Payload['order']
 ): void => {
   const context = useContext(GroupContext)
   const dispatch = useContext(GroupDispatchContext)
   const initialProps = useRef({ annotation, context, dispatch, order })
 
   useEffect(() => {
-    const { annotation, context, dispatch, order } = initialProps.current
+    const {
+      annotation: currentAnnotation,
+      context: currentContext,
+      dispatch: currentDispatch,
+      order: currentOrder,
+    } = initialProps.current
 
-    if (!context) {
-      return undefined
+    if (!currentContext) {
+      return
     }
 
-    if (dispatch) {
-      dispatch({
+    if (currentDispatch) {
+      return currentDispatch({
         type: 'ADD',
-        payload: { annotation, order },
+        payload: { annotation: currentAnnotation, order: currentOrder },
       })
     }
-
-    return
   }, [])
 }
 
