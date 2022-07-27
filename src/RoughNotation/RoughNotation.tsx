@@ -1,5 +1,4 @@
-import React from 'react'
-import { useRef, useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 
 import { annotate } from 'rough-notation'
 
@@ -54,12 +53,12 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
 
   useEffect(() => {
     const options = initialOptions.current
-    const { getAnnotationObject } = options
+    const { getAnnotationObject: getAnnotationObjectFromOptions } = options
 
     annotation.current = annotate(element.current!, options)
 
-    if (getAnnotationObject) {
-      getAnnotationObject(annotation.current)
+    if (getAnnotationObjectFromOptions) {
+      getAnnotationObjectFromOptions(annotation.current)
     }
 
     return () => {
