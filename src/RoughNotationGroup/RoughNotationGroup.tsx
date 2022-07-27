@@ -73,22 +73,33 @@ const RoughNotationGroup: React.FunctionComponent<RoughNotationGroupProps> = ({
   show,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
+  const timeouts = useRef<NodeJS.Timeout[]>([])
 
   useEffect(() => {
     let nextTimeout = 0
 
     state.annotations.forEach(({ annotation }) => {
       if (show) {
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           annotation.show()
         }, nextTimeout)
+
+        timeouts.current.push(timeout)
 
         nextTimeout += annotation.getAnnotation().animationDuration || 0
       } else {
         annotation.hide()
+
+        timeouts.current.forEach((timeout) => {
+          clearTimeout(timeout)
+
+          timeouts.current = timeouts.current.filter(
+            (currentTimeout) => currentTimeout !== timeout
+          )
+        })
       }
     })
-  }, [show, state])
+  }, [show, state, timeouts])
 
   return (
     <GroupContext.Provider value={state}>
