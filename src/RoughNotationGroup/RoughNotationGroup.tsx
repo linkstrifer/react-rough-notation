@@ -86,7 +86,7 @@ const RoughNotationGroup: React.FunctionComponent<RoughNotationGroupProps> = ({
 
         timeouts.current.push(timeout)
 
-        nextTimeout += annotation.getAnnotation().animationDuration || 0
+        nextTimeout += annotation.getAnnotation().animationDuration || 800
       } else {
         annotation.hide()
 
