@@ -8,7 +8,11 @@ export declare type State = {
     annotations: Array<Payload>;
 };
 export declare type Payload = {
-    annotation: React.RefObject<Annotation | undefined>;
+    annotation: {
+        getAnnotation: () => Annotation;
+        show: () => void;
+        hide: () => void;
+    };
     order: number | undefined;
 };
 export declare type Action = {

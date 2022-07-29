@@ -88,18 +88,27 @@ function reducer(state, _a) {
 var RoughNotationGroup = function (_a) {
     var children = _a.children, show = _a.show;
     var _b = React.useReducer(reducer, initialState), state = _b[0], dispatch = _b[1];
+    var timeouts = React.useRef([]);
     React.useEffect(function () {
-        var group = roughNotation.annotationGroup(state.annotations.map(function (_a) {
+        var nextTimeout = 0;
+        state.annotations.forEach(function (_a) {
             var annotation = _a.annotation;
-            return annotation.current;
-        }));
-        if (show) {
-            group.show();
-        }
-        else {
-            group.hide();
-        }
-    }, [show, state]);
+            if (show) {
+                var timeout = setTimeout(function () {
+                    annotation.show();
+                }, nextTimeout);
+                timeouts.current.push(timeout);
+                nextTimeout += annotation.getAnnotation().animationDuration || 800;
+            }
+            else {
+                annotation.hide();
+                timeouts.current.forEach(function (timeout) {
+                    clearTimeout(timeout);
+                    timeouts.current = timeouts.current.filter(function (currentTimeout) { return currentTimeout !== timeout; });
+                });
+            }
+        });
+    }, [show, state, timeouts]);
     return (React__default.createElement(GroupContext.Provider, { value: state },
         React__default.createElement(GroupDispatchContext.Provider, { value: dispatch }, children)));
 };
@@ -108,17 +117,16 @@ var useGroupContext = function (annotation, order) {
     var dispatch = React.useContext(GroupDispatchContext);
     var initialProps = React.useRef({ annotation: annotation, context: context, dispatch: dispatch, order: order });
     React.useEffect(function () {
-        var _a = initialProps.current, annotation = _a.annotation, context = _a.context, dispatch = _a.dispatch, order = _a.order;
-        if (!context) {
-            return undefined;
+        var _a = initialProps.current, currentAnnotation = _a.annotation, currentContext = _a.context, currentDispatch = _a.dispatch, currentOrder = _a.order;
+        if (!currentContext) {
+            return;
         }
-        if (dispatch) {
-            dispatch({
+        if (currentDispatch) {
+            return currentDispatch({
                 type: 'ADD',
-                payload: { annotation: annotation, order: order },
+                payload: { annotation: currentAnnotation, order: currentOrder },
             });
         }
-        return;
     }, []);
 };
 
@@ -142,13 +150,42 @@ var RoughNotation = function (_a) {
         strokeWidth: strokeWidth,
         type: type,
     });
-    useGroupContext(annotation, typeof order === 'string' ? parseInt(order) : order);
+    var showAnnotation = React.useCallback(function () {
+        if (!innerVars.current.timeout) {
+            innerVars.current.timeout = window.setTimeout(function () {
+                var _a, _b;
+                innerVars.current.playing = true;
+                (_b = (_a = annotation.current) === null || _a === void 0 ? void 0 : _a.show) === null || _b === void 0 ? void 0 : _b.call(_a);
+                window.setTimeout(function () {
+                    innerVars.current.playing = false;
+                    innerVars.current.timeout = null;
+                }, animationDuration);
+            }, animationDelay);
+        }
+    }, [animationDelay, animationDuration]);
+    var hideAnnotation = React.useCallback(function () {
+        var _a, _b;
+        (_b = (_a = annotation.current) === null || _a === void 0 ? void 0 : _a.hide) === null || _b === void 0 ? void 0 : _b.call(_a);
+        innerVars.current.playing = false;
+        if (innerVars.current.timeout) {
+            clearTimeout(innerVars.current.timeout);
+            innerVars.current.timeout = null;
+        }
+    }, []);
+    var getAnnotation = React.useCallback(function () {
+        return annotation.current;
+    }, [annotation]);
+    useGroupContext({
+        getAnnotation: getAnnotation,
+        show: showAnnotation,
+        hide: hideAnnotation,
+    }, typeof order === 'string' ? parseInt(order) : order);
     React.useEffect(function () {
         var options = initialOptions.current;
-        var getAnnotationObject = options.getAnnotationObject;
+        var getAnnotationObjectFromOptions = options.getAnnotationObject;
         annotation.current = roughNotation.annotate(element.current, options);
-        if (getAnnotationObject) {
-            getAnnotationObject(annotation.current);
+        if (getAnnotationObjectFromOptions) {
+            getAnnotationObjectFromOptions(annotation.current);
         }
         return function () {
             var _a, _b;
@@ -156,29 +193,21 @@ var RoughNotation = function (_a) {
         };
     }, []);
     React.useEffect(function () {
-        var _a, _b;
         if (show) {
-            if (!innerVars.current.timeout) {
-                innerVars.current.timeout = window.setTimeout(function () {
-                    var _a, _b;
-                    innerVars.current.playing = true;
-                    (_b = (_a = annotation.current) === null || _a === void 0 ? void 0 : _a.show) === null || _b === void 0 ? void 0 : _b.call(_a);
-                    window.setTimeout(function () {
-                        innerVars.current.playing = false;
-                        innerVars.current.timeout = null;
-                    }, animationDuration);
-                }, animationDelay);
-            }
+            showAnnotation();
         }
         else {
-            (_b = (_a = annotation.current) === null || _a === void 0 ? void 0 : _a.hide) === null || _b === void 0 ? void 0 : _b.call(_a);
-            innerVars.current.playing = false;
-            if (innerVars.current.timeout) {
-                clearTimeout(innerVars.current.timeout);
-                innerVars.current.timeout = null;
-            }
+            hideAnnotation();
         }
-    }, [annotation, show, animationDelay, innerVars, animationDuration]);
+    }, [
+        annotation,
+        show,
+        animationDelay,
+        innerVars,
+        animationDuration,
+        showAnnotation,
+        hideAnnotation,
+    ]);
     React.useEffect(function () {
         if (annotation.current) {
             annotation.current.animate = animate;

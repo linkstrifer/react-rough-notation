@@ -12,7 +12,11 @@ export type State = {
 }
 
 export type Payload = {
-  annotation: React.RefObject<Annotation | undefined>
+  annotation: {
+    getAnnotation: () => Annotation
+    show: () => void
+    hide: () => void
+  }
   order: number | undefined
 }
 
