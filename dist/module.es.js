@@ -93,7 +93,7 @@ var RoughNotationGroup = function (_a) {
                     annotation.show();
                 }, nextTimeout);
                 timeouts.current.push(timeout);
-                nextTimeout += annotation.getAnnotation().animationDuration || 0;
+                nextTimeout += annotation.getAnnotation().animationDuration || 800;
             }
             else {
                 annotation.hide();
