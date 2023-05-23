@@ -24,7 +24,7 @@
     "@types/react-dom": "^16.9.8",
     "@typescript-eslint/eslint-plugin": "^3.6.0",
     "@typescript-eslint/parser": "^3.6.0",
-    "babel-core": "^4.7.16",
+    "babel-core": "^6.26.3",
     "babel-runtime": "^6.26.0",
     "eslint": "^7.4.0",
     "eslint-plugin-react": "^7.20.3",
