@@ -1,6 +1,6 @@
 {
   "name": "react-rough-notation",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "./dist/main.js",
   "module": "./dist/module.es.js",
   "types": "./dist/index.d.ts",
@@ -8,7 +8,7 @@
     "build": "rollup -c",
     "start": "rollup -c -w",
     "publish:beta": "npm run build && npm publish --tag beta",
-    "publish:stable": "npm run build && npm publish --tag stable"
+    "publish": "npm run build && npm publish"
   },
   "dependencies": {
     "rough-notation": "^0.5.1"
