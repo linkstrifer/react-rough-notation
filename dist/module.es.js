@@ -1,3 +1,4 @@
+'use client';
 import React, { createContext, useReducer, useRef, useEffect, useContext, useCallback } from 'react';
 import { annotate } from 'rough-notation';
 

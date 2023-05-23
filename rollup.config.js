@@ -8,15 +8,18 @@ import pkg from './package.json'
 export default {
   external: ['rough-notation'],
   input: 'src/index.ts',
+  strictDeprecations: true,
   output: [
     {
+      banner: `'use client';`,
+      exports: 'named',
       file: pkg.main,
       format: 'cjs',
-      exports: 'named',
       sourcemap: true,
       strict: false,
     },
     {
+      banner: `'use client';`,
       file: pkg.module,
       format: 'esm',
       sourcemap: true,

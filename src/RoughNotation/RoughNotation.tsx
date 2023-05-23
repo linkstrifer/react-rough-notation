@@ -1,3 +1,4 @@
+'use client'
 import React, { useRef, useEffect, useCallback } from 'react'
 
 import { annotate } from 'rough-notation'

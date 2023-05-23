@@ -1,10 +1,12 @@
+'use client';
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
-
 var React = require('react');
-var React__default = _interopDefault(React);
 var roughNotation = require('rough-notation');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var React__default = /*#__PURE__*/_interopDefaultLegacy(React);
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -109,8 +111,8 @@ var RoughNotationGroup = function (_a) {
             }
         });
     }, [show, state, timeouts]);
-    return (React__default.createElement(GroupContext.Provider, { value: state },
-        React__default.createElement(GroupDispatchContext.Provider, { value: dispatch }, children)));
+    return (React__default["default"].createElement(GroupContext.Provider, { value: state },
+        React__default["default"].createElement(GroupDispatchContext.Provider, { value: dispatch }, children)));
 };
 var useGroupContext = function (annotation, order) {
     var context = React.useContext(GroupContext);
@@ -217,7 +219,7 @@ var RoughNotation = function (_a) {
             annotation.current.padding = padding;
         }
     }, [annotation, animate, animationDuration, color, strokeWidth, padding]);
-    return React__default.createElement(customElement, __assign({ ref: element }, rest), children);
+    return React__default["default"].createElement(customElement, __assign({ ref: element }, rest), children);
 };
 
 exports.RoughNotation = RoughNotation;

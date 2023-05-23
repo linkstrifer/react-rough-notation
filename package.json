@@ -1,12 +1,14 @@
 {
   "name": "react-rough-notation",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "./dist/main.js",
   "module": "./dist/module.es.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "rollup -c",
-    "start": "rollup -c -w"
+    "start": "rollup -c -w",
+    "publish:beta": "npm run build && npm publish --tag beta",
+    "publish:stable": "npm run build && npm publish --tag stable"
   },
   "dependencies": {
     "rough-notation": "^0.5.1"
@@ -29,7 +31,7 @@
     "eslint-plugin-react-hooks": "^4.0.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "rollup": "^2.11.2",
+    "rollup": "^2.79.1",
     "rollup-plugin-peer-deps-external": "^2.2.3",
     "rollup-plugin-typescript2": "^0.27.1",
     "typescript": "^3.9.3"
