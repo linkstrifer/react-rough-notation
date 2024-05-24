@@ -85,8 +85,8 @@ Any unlisted prop will be pass to the component so you can use any react prop to
 | box            | This style draws a box around the element               |
 | circle         | Draw a circle around the element                        |
 | highlight      | Creates a highlight effect as if maked by a highlighter |
-| strike-through | This style draws a box around the element               |
-| crossed-off    | This style draws a box around the element               |
+| strike-through | Draws a horizontal line over the element                |
+| crossed-off    | Crosses out the element with two diagonal lines         |
 
 ### Updating Styles
 
