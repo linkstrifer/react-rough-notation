@@ -1,112 +1,72 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
-  useReducer,
   useRef,
+  useState,
 } from 'react'
 
-import {
-  Action,
-  Dispatch,
-  Payload,
-  RoughNotationGroupProps,
-  State,
-} from './types'
+import { Payload, Register, RoughNotationGroupProps } from './types'
 
-const GroupContext = createContext<State | null>(null)
-const GroupDispatchContext = createContext<Dispatch | null>(null)
+// The context value is a stable register function, so registering or
+// unregistering an annotation never re-renders the group's children.
+const GroupContext = createContext<Register | null>(null)
 
-const initialState: State = {
-  annotations: [],
-}
+function byOrder(a: Payload, b: Payload) {
+  if (a.order === undefined) return b.order === undefined ? 0 : 1
+  if (b.order === undefined) return -1
 
-function reducer(state: State, { type, payload }: Action) {
-  switch (type) {
-    case 'ADD': {
-      const annotations = [...state.annotations, payload]
-
-      const annotationsToSort = annotations.reduce(
-        (toSort, annotation) => {
-          const newAnnotations: {
-            withOrder: Payload[]
-            withoutOrder: Payload[]
-          } = {
-            ...toSort,
-          }
-
-          if (typeof annotation.order === 'number') {
-            newAnnotations.withOrder = [
-              ...newAnnotations.withOrder,
-              annotation,
-            ].sort((a, b) => a.order! - b.order!)
-          } else {
-            newAnnotations.withoutOrder = [
-              ...newAnnotations.withoutOrder,
-              annotation,
-            ]
-          }
-
-          return newAnnotations
-        },
-        {
-          withOrder: [],
-          withoutOrder: [],
-        }
-      )
-
-      return {
-        ...state,
-        annotations: [
-          ...annotationsToSort.withOrder,
-          ...annotationsToSort.withoutOrder,
-        ],
-      }
-    }
-    default:
-      return state
-  }
+  return a.order - b.order
 }
 
 const RoughNotationGroup: React.FunctionComponent<RoughNotationGroupProps> = ({
   children,
   show,
 }) => {
-  const [state, dispatch] = useReducer(reducer, initialState)
-  const timeouts = useRef<NodeJS.Timeout[]>([])
+  const annotations = useRef<Payload[]>([])
+  const [version, setVersion] = useState(0)
+
+  const register = useCallback<Register>((payload) => {
+    annotations.current = [...annotations.current, payload]
+    setVersion((current) => current + 1)
+
+    return () => {
+      annotations.current = annotations.current.filter(
+        (annotation) => annotation !== payload
+      )
+      setVersion((current) => current + 1)
+    }
+  }, [])
 
   useEffect(() => {
+    // Array.prototype.sort is stable, so annotations without an order keep
+    // their registration order after the ordered ones.
+    const sorted = [...annotations.current].sort(byOrder)
+
+    if (!show) {
+      sorted.forEach(({ annotation }) => annotation.hide())
+
+      return
+    }
+
     let nextTimeout = 0
 
-    state.annotations.forEach(({ annotation }) => {
-      if (show) {
-        const timeout = setTimeout(() => {
-          annotation.show()
-        }, nextTimeout)
+    const timeouts = sorted.map(({ annotation }) => {
+      const timeout = window.setTimeout(annotation.show, nextTimeout)
 
-        timeouts.current.push(timeout)
+      nextTimeout += annotation.getAnnotation()?.animationDuration || 800
 
-        nextTimeout += annotation.getAnnotation().animationDuration || 800
-      } else {
-        annotation.hide()
-
-        timeouts.current.forEach((timeout) => {
-          clearTimeout(timeout)
-
-          timeouts.current = timeouts.current.filter(
-            (currentTimeout) => currentTimeout !== timeout
-          )
-        })
-      }
+      return timeout
     })
-  }, [show, state, timeouts])
+
+    return () => {
+      timeouts.forEach((timeout) => window.clearTimeout(timeout))
+    }
+  }, [show, version])
 
   return (
-    <GroupContext.Provider value={state}>
-      <GroupDispatchContext.Provider value={dispatch}>
-        {children}
-      </GroupDispatchContext.Provider>
-    </GroupContext.Provider>
+    <GroupContext.Provider value={register}>{children}</GroupContext.Provider>
   )
 }
 
@@ -114,28 +74,24 @@ export const useGroupContext = (
   annotation: Payload['annotation'],
   order: Payload['order']
 ): void => {
-  const context = useContext(GroupContext)
-  const dispatch = useContext(GroupDispatchContext)
-  const initialProps = useRef({ annotation, context, dispatch, order })
+  const register = useContext(GroupContext)
+  const initialProps = useRef({ annotation, order, register })
 
   useEffect(() => {
     const {
       annotation: currentAnnotation,
-      context: currentContext,
-      dispatch: currentDispatch,
       order: currentOrder,
+      register: currentRegister,
     } = initialProps.current
 
-    if (!currentContext) {
+    if (!currentRegister) {
       return
     }
 
-    if (currentDispatch) {
-      return currentDispatch({
-        type: 'ADD',
-        payload: { annotation: currentAnnotation, order: currentOrder },
-      })
-    }
+    return currentRegister({
+      annotation: currentAnnotation,
+      order: currentOrder,
+    })
   }, [])
 }
 

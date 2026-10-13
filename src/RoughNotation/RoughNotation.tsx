@@ -30,9 +30,11 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
   const innerVars = useRef<{
     playing: boolean
     timeout: null | number
+    playingTimeout: null | number
   }>({
     playing: false,
     timeout: null,
+    playingTimeout: null,
   })
   const initialOptions = useRef({
     animate,
@@ -47,6 +49,20 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
     type,
   })
 
+  const clearTimeouts = useCallback(() => {
+    const { timeout, playingTimeout } = innerVars.current
+
+    if (timeout) {
+      window.clearTimeout(timeout)
+      innerVars.current.timeout = null
+    }
+
+    if (playingTimeout) {
+      window.clearTimeout(playingTimeout)
+      innerVars.current.playingTimeout = null
+    }
+  }, [])
+
   const showAnnotation = useCallback(() => {
     if (!innerVars.current.timeout) {
       innerVars.current.timeout = window.setTimeout(() => {
@@ -54,9 +70,10 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
 
         annotation.current?.show?.()
 
-        window.setTimeout(() => {
+        innerVars.current.playingTimeout = window.setTimeout(() => {
           innerVars.current.playing = false
           innerVars.current.timeout = null
+          innerVars.current.playingTimeout = null
         }, animationDuration)
       }, animationDelay)
     }
@@ -66,15 +83,10 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
     annotation.current?.hide?.()
     innerVars.current.playing = false
 
-    if (innerVars.current.timeout) {
-      clearTimeout(innerVars.current.timeout)
-      innerVars.current.timeout = null
-    }
-  }, [])
+    clearTimeouts()
+  }, [clearTimeouts])
 
-  const getAnnotation = useCallback(() => {
-    return annotation.current!
-  }, [annotation])
+  const getAnnotation = useCallback(() => annotation.current, [])
 
   useGroupContext(
     {
@@ -96,9 +108,10 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
     }
 
     return () => {
+      clearTimeouts()
       annotation.current?.remove?.()
     }
-  }, [])
+  }, [clearTimeouts])
 
   useEffect(() => {
     if (show) {
@@ -106,25 +119,45 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
     } else {
       hideAnnotation()
     }
-  }, [
-    annotation,
-    show,
-    animationDelay,
-    innerVars,
-    animationDuration,
-    showAnnotation,
-    hideAnnotation,
-  ])
+  }, [show, showAnnotation, hideAnnotation])
 
+  // rough-notation redraws the SVG whenever color, strokeWidth or padding is
+  // assigned a value that isn't `===` to the current one, so each property gets
+  // its own effect, and padding is keyed by value so an inline array doesn't
+  // trigger a redraw on every render.
   useEffect(() => {
     if (annotation.current) {
       annotation.current.animate = animate
-      annotation.current.animationDuration = animationDuration
-      annotation.current.color = color
-      annotation.current.strokeWidth = strokeWidth
-      annotation.current.padding = padding
     }
-  }, [annotation, animate, animationDuration, color, strokeWidth, padding])
+  }, [animate])
+
+  useEffect(() => {
+    if (annotation.current) {
+      annotation.current.animationDuration = animationDuration
+    }
+  }, [animationDuration])
+
+  useEffect(() => {
+    if (annotation.current) {
+      annotation.current.color = color
+    }
+  }, [color])
+
+  useEffect(() => {
+    if (annotation.current) {
+      annotation.current.strokeWidth = strokeWidth
+    }
+  }, [strokeWidth])
+
+  const latestPadding = useRef(padding)
+  latestPadding.current = padding
+  const paddingKey = Array.isArray(padding) ? padding.join(',') : padding
+
+  useEffect(() => {
+    if (annotation.current) {
+      annotation.current.padding = latestPadding.current
+    }
+  }, [paddingKey])
 
   return React.createElement(
     customElement,
