@@ -75,7 +75,7 @@ Any unlisted prop will be pass to the component so you can use any react prop to
 | padding             | `number`, `[top, right, bottom, left]`, `[vertical, horizontal]` | `5`                  | Padding in pixels between the element and roughly where the annotation is drawn. If you wish to specify different `top`, `left`, `right`, `bottom` paddings, you can set the value to an array akin to CSS style padding `[top, right, bottom, left]` or just `[top & bottom, left & right]` |
 | show                | `boolean`                                                        | `false`              | Show/hide the annotation                                                                                                                                                                                                                                                                     |
 | strokeWidth         | `number`                                                         | `1`                  | Width of the annotation strokes                                                                                                                                                                                                                                                              |
-| type                | `enum` from (Type values)[#type-values]                          | `underline`          | It sets the annotation style                                                                                                                                                                                                                                                                 |
+| type                | `enum` from [Type values](#type-values)                          | `underline`          | It sets the annotation style                                                                                                                                                                                                                                                                 |
 
 ### Type values
 
@@ -87,6 +87,7 @@ Any unlisted prop will be pass to the component so you can use any react prop to
 | highlight      | Creates a highlight effect as if maked by a highlighter |
 | strike-through | Draws a horizontal line over the element                |
 | crossed-off    | Crosses out the element with two diagonal lines         |
+| bracket        | Draws brackets on the sides set by the `brackets` prop  |
 
 ### Updating Styles
 

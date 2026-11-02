@@ -24,12 +24,21 @@ interface RoughNotationProperties {
   strokeWidth?: number
 }
 
-export interface RoughNotationProps extends RoughNotationProperties {
+// Unlisted props are passed through to the wrapper element, so accept any
+// HTML attribute that doesn't clash with an annotation option.
+type WrapperProps = Omit<
+  React.HTMLAttributes<HTMLElement>,
+  keyof RoughNotationProperties | 'children'
+>
+
+export interface RoughNotationProps
+  extends RoughNotationProperties,
+    WrapperProps {
   children: React.ReactNode
   customElement?: string
   getAnnotationObject?: (annotation: Annotation) => void
   show?: boolean
-  type: types
+  type?: types
 }
 
 export interface Annotation extends RoughNotationProperties {
