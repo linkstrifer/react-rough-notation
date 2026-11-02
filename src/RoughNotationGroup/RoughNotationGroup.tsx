@@ -55,8 +55,7 @@ const RoughNotationGroup: React.FunctionComponent<RoughNotationGroupProps> = ({
     const timeouts = sorted.map(({ annotation }) => {
       const timeout = window.setTimeout(annotation.show, nextTimeout)
 
-      // An animationDuration of 0 means no animation, so don't wait for it.
-      nextTimeout += annotation.getAnnotation()?.animationDuration ?? 800
+      nextTimeout += annotation.getRunTime()
 
       return timeout
     })

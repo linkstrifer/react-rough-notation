@@ -49,6 +49,11 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
     type,
   })
 
+  // The group registers this annotation's callbacks once, at mount, so they
+  // read the timing props through a ref to always see the latest values.
+  const timing = useRef({ animate, animationDelay, animationDuration })
+  timing.current = { animate, animationDelay, animationDuration }
+
   const clearTimeouts = useCallback(() => {
     const { timeout, playingTimeout } = innerVars.current
 
@@ -64,6 +69,8 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
   }, [])
 
   const showAnnotation = useCallback(() => {
+    const { animationDelay, animationDuration } = timing.current
+
     if (!innerVars.current.timeout) {
       innerVars.current.timeout = window.setTimeout(() => {
         innerVars.current.playing = true
@@ -77,7 +84,7 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
         }, animationDuration)
       }, animationDelay)
     }
-  }, [animationDelay, animationDuration])
+  }, [])
 
   const hideAnnotation = useCallback(() => {
     annotation.current?.hide?.()
@@ -86,11 +93,17 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
     clearTimeouts()
   }, [clearTimeouts])
 
-  const getAnnotation = useCallback(() => annotation.current, [])
+  // How long the group waits before it shows the next annotation. With
+  // animate off, rough-notation draws at once, so only the delay counts.
+  const getRunTime = useCallback(() => {
+    const { animate, animationDelay, animationDuration } = timing.current
+
+    return animationDelay + (animate ? animationDuration : 0)
+  }, [])
 
   useGroupContext(
     {
-      getAnnotation,
+      getRunTime,
       show: showAnnotation,
       hide: hideAnnotation,
     },

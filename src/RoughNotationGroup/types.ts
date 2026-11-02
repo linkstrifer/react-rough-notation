@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { Annotation } from '../RoughNotation/types'
-
 export interface RoughNotationGroupProps {
   children: React.ReactNode
   show?: boolean
@@ -9,7 +7,9 @@ export interface RoughNotationGroupProps {
 
 export type Payload = {
   annotation: {
-    getAnnotation: () => Annotation | undefined
+    // Delay plus draw time, in ms. The group waits this long before it shows
+    // the next annotation.
+    getRunTime: () => number
     show: () => void
     hide: () => void
   }

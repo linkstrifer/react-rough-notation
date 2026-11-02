@@ -107,6 +107,8 @@ _Note: the type of the annotation cannot be changed. Create a new annotation for
 
 This is a wrapper for multiple annotations, it will trigger the `show()` method on every child annotation after the prev annotation animation is complete. **It does not render any HTML element.**
 
+Each annotation waits for its own `animationDelay`, then draws for its `animationDuration`, and only then does the next one start. So a delay adds a gap before that annotation and pushes the later ones back. An annotation with `animate={false}` draws at once, so the group only waits for its delay.
+
 ### Usage
 
 ```jsx
