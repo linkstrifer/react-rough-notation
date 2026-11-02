@@ -18,6 +18,7 @@ vi.mock('rough-notation', () => ({
         Math.round((Date.now() - start) / 10) * 10,
       ]),
     hide: () => undefined,
+    isShowing: () => false,
     remove: () => undefined,
   }),
 }))

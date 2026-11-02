@@ -73,6 +73,7 @@ Any unlisted prop will be pass to the component so you can use any react prop to
 | multiline           | `boolean`                                                        | `false`              | This property only applies to inline text. To annotate multiline text (each line separately), set this property to true.                                                                                                                                                                     |
 | order               | `number`, `string`                                               |                      | Annotation order to animate if is inside an Annotation Group                                                                                                                                                                                                                                 |
 | padding             | `number`, `[top, right, bottom, left]`, `[vertical, horizontal]` | `5`                  | Padding in pixels between the element and roughly where the annotation is drawn. If you wish to specify different `top`, `left`, `right`, `bottom` paddings, you can set the value to an array akin to CSS style padding `[top, right, bottom, left]` or just `[top & bottom, left & right]` |
+| rtl                 | `boolean`                                                        | `false`              | Draw the annotation right to left, for right-to-left languages.                                                                                                                                                                                                                              |
 | show                | `boolean`                                                        | `false`              | Show/hide the annotation                                                                                                                                                                                                                                                                     |
 | strokeWidth         | `number`                                                         | `1`                  | Width of the annotation strokes                                                                                                                                                                                                                                                              |
 | type                | `enum` from [Type values](#type-values)                          | `underline`          | It sets the annotation style                                                                                                                                                                                                                                                                 |
@@ -101,7 +102,7 @@ Some props can be changed after the initialization without re-rendering the anno
 | padding           |
 | strokeWidth       |
 
-_Note: the type of the annotation cannot be changed. Create a new annotation for that._
+Changing `type`, `brackets`, `iterations`, `multiline` or `rtl` removes the annotation and creates a new one with the current props. If it was showing, the new one is shown at once (animated if `animate` is on), and `getAnnotationObject` receives the new annotation object.
 
 ## RoughNotationGroup Component
 
@@ -154,4 +155,4 @@ You can find a [CodeSandbox demo here](https://codesandbox.io/s/github/linkstrif
 ## TODO
 
 - [ ] Auto compile and publish to npm
-- [ ] Testing
+- [x] Testing

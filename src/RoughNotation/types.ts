@@ -21,6 +21,7 @@ interface RoughNotationProperties {
   multiline?: boolean
   order?: number | string
   padding?: number | [number, number, number, number] | [number, number]
+  rtl?: boolean
   strokeWidth?: number
 }
 

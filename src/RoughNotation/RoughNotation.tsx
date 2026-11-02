@@ -20,6 +20,7 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
   multiline = false,
   order,
   padding = 5,
+  rtl = false,
   show = false,
   strokeWidth = 1,
   type = 'underline',
@@ -36,19 +37,6 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
     timeout: null,
     playingTimeout: null,
   })
-  const initialOptions = useRef({
-    animate,
-    animationDuration,
-    brackets,
-    color,
-    getAnnotationObject,
-    iterations,
-    multiline,
-    padding,
-    strokeWidth,
-    type,
-  })
-
   // The group registers this annotation's callbacks once, at mount, so they
   // read the timing props through a ref to always see the latest values.
   const timing = useRef({ animate, animationDelay, animationDuration })
@@ -110,21 +98,48 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
     typeof order === 'string' ? parseInt(order) : order
   )
 
+  // The latest props, read when an annotation is created so a re-created
+  // annotation keeps the current color, padding and so on.
+  const options = {
+    animate,
+    animationDuration,
+    brackets,
+    color,
+    getAnnotationObject,
+    iterations,
+    multiline,
+    padding,
+    rtl,
+    strokeWidth,
+    type,
+  }
+  const latest = useRef(options)
+  latest.current = options
+
+  // rough-notation can't change these options on an existing annotation, so a
+  // change removes it and annotates again. Arrays are keyed by value so an
+  // inline array doesn't re-create the annotation on every render.
+  const bracketsKey = Array.isArray(brackets) ? brackets.join(',') : brackets
+  const wasShowing = useRef(false)
+
   useEffect(() => {
-    const options = initialOptions.current
-    const { getAnnotationObject: getAnnotationObjectFromOptions } = options
+    const { getAnnotationObject, ...options } = latest.current
+    const current = annotate(element.current!, options)
 
-    annotation.current = annotate(element.current!, options)
+    annotation.current = current
+    getAnnotationObject?.(current)
 
-    if (getAnnotationObjectFromOptions) {
-      getAnnotationObjectFromOptions(annotation.current)
+    if (wasShowing.current) {
+      current.show()
     }
 
     return () => {
-      clearTimeouts()
-      annotation.current?.remove?.()
+      wasShowing.current = current.isShowing()
+      current.remove()
     }
-  }, [clearTimeouts])
+  }, [type, bracketsKey, iterations, multiline, rtl])
+
+  useEffect(() => clearTimeouts, [clearTimeouts])
 
   useEffect(() => {
     if (show) {
@@ -162,13 +177,11 @@ const RoughNotation: React.FunctionComponent<RoughNotationProps> = ({
     }
   }, [strokeWidth])
 
-  const latestPadding = useRef(padding)
-  latestPadding.current = padding
   const paddingKey = Array.isArray(padding) ? padding.join(',') : padding
 
   useEffect(() => {
     if (annotation.current) {
-      annotation.current.padding = latestPadding.current
+      annotation.current.padding = latest.current.padding
     }
   }, [paddingKey])
 
